@@ -11,6 +11,7 @@
     'website': '',
     'license': 'LGPL-3',
     'depends': [
+        'purchase',
 
     ],
     'data': [
