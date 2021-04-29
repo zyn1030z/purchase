@@ -12,6 +12,9 @@
                     <!-- Add your fields or attributes here -->
                     <field name="test"/>
                 </xpath>
+                <xpath expr="//field[@name='partner_ref']" position="replace">
+                    
+                </xpath>
 
             </field>
         </record>
