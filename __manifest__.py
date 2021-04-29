@@ -15,8 +15,9 @@
 
     ],
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/purchase_request.xml',
+        'security/ir.model.access.csv',
+        # 'views/test.xml',
+        'views/purchase_request.xml'
     ],
     'demo': [],
     'qweb': [],
