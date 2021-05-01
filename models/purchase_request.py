@@ -3,9 +3,7 @@ from odoo import models, fields, api, exceptions
 
 
 class PurchaseRequest(models.Model):
-    _name = 'hotel.room.booking'
-    _description = 'Hotel Room Booking'
-    _rec_name = 'code'
+    _name = 'purchase.request'
 
     name = fields.Char(string='Số phiếu', required=True)
     request_by = fields.Char(string='người yêu cầu')

@@ -1,55 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
-        <record id="purchase_request_form_view" model="ir.ui.view">
-            <field name="name">purchase_request.purchase_request.form</field>
+        <record id="purchase_request_tree" model="ir.ui.view">
+            <field name="name">purchase.request.tree</field>
             <field name="model">purchase.request</field>
             <field name="arch" type="xml">
-                <form string="Purchase request">
+                <tree string="Purchase Request">
+                    <field name="name"/>
+                    <field name="request_by"/>
+                    <field name="department"/>
+                    <field name="cost_total"/>
+                    <field name="creation_date"/>
+                    <field name="due_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="purchase_request_form" model="ir.ui.view">
+            <field name="name">purchase.request.form</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Request">
+                    <header>
+                        <!--                            <button name="" string="View Results" type="object"/>-->
+                        <field name="state" widget="statusbar" nolabel="1" statusbar_visible="booking,in_use,paid"/>
+                    </header>
                     <sheet>
                         <div class="oe_title">
+                            <label for="code" class="oe_edit_only"/>
                             <h1>
-                                <field name="test" placeholder="Title"/>
+                                <field name="name" placeholder="Mã name" required="True"/>
                             </h1>
                         </div>
                         <group>
                             <group>
-                                <field name="test1"/>
+                                <field name="name"/>
+                                <field name="request_by"/>
+                                <field name="department"/>
+                                <field name="cost_total"/>
                             </group>
                             <group>
-                                <field name="test2"/>
+                                <field name="creation_date"/>
+                                <field name="due_date"/>
+                                <field name="state"/>
                             </group>
                         </group>
+                        <!--                        <notebook>-->
+                        <!--                            <page name="room_ids" string="Danh sách phòng thuê">-->
+                        <!--                                <group>-->
+                        <!--                                    <field name="room_booking_ids" nolabel="1">-->
+                        <!--                                        <tree string="Danh sách phòng" editable="bottom">-->
+                        <!--                                            <field name="customer_id"/>-->
+                        <!--                                            <field name="identify_number"/>-->
+                        <!--                                            <field name="phone"/>-->
+                        <!--                                            <field name="number_of_persons"/>-->
+                        <!--                                            <field name="room_id"/>-->
+                        <!--                                            <field name="room_type"/>-->
+                        <!--                                            <field name="room_view"/>-->
+                        <!--                                            <field name="room_price"/>-->
+                        <!--                                            <field name="start_date"/>-->
+                        <!--                                            <field name="end_date"/>-->
+                        <!--                                            <field name="state"/>-->
+                        <!--                                        </tree>-->
+                        <!--                                    </field>-->
+                        <!--                                </group>-->
+                        <!--                            </page>-->
+                        <!--                        </notebook>-->
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="purchase_request_tree_view" model="ir.ui.view">
-            <field name="name">purchase_request.purchase_request.tree</field>
-            <field name="model">purchase.request</field>
-            <field name="arch" type="xml">
-                <tree string="ModelTitle">
-                    <field name="test"/>
-                    <field name="test1"/>
-                </tree>
-            </field>
-        </record>
-
-        <record id="purchase_request_act_window" model="ir.actions.act_window">
+        <record id="purchase_request_act" model="ir.actions.act_window">
             <field name="name">Purchase Request</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">purchase.request</field>
             <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                    There is no examples click here to add new ModelTitle.
-                </p>
-            </field>
         </record>
 
-        <menuitem name="Purchase Request" id="purchase_request_menu"  action="purchase_request_act_window"/>
-
+        <menuitem id="hotel_room_booking_menu" name="Purchase Request Menu"
+                  action="purchase_request_act" sequence="1"/>
     </data>
 </odoo>
