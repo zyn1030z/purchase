@@ -15,7 +15,7 @@ class PurchaseRequest(models.Model):
     # check_by = fields.Char(string='Người duyệt')
     check_by = fields.Many2one('res.users', 'Người duyệt', default=lambda self: self.env.user)
     department = fields.Char(string='Bộ phận')
-    cost_total = fields.Char(string='Tổng chi phí')
+    cost_total = fields.Char(string='Tổng chi phí', compute='_amount_all')
     creation_date = fields.Date(string='Ngày yêu cầu', default=datetime.today())
     due_date = fields.Date(string='Ngày cần cấp')
     approved_date = fields.Date(string='Ngày phê duyệt')
@@ -65,3 +65,10 @@ class PurchaseRequest(models.Model):
     #         sequence_pool = self.env['purchase.request']
     #         name = sequence_pool.sudo().get_id(sequence_id.id)
     #         self.write({'name': name})
+    @api.depends('order_request_line.price_subtotal')
+    def _amount_all(self):
+        for order in self:
+            amount_total = 0
+            for line in order.order_request_line:
+                amount_total += line.price_subtotal
+            order.cost_total = amount_total

@@ -12,7 +12,7 @@
     'license': 'LGPL-3',
     'depends': [
         'purchase',
-
+        'account'
     ],
     'data': [
         'security/ir.model.access.csv',
