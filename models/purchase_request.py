@@ -59,12 +59,6 @@ class PurchaseRequest(models.Model):
         vals['name'] = name + '.' + seq
         return super(PurchaseRequest, self).create(vals)
 
-    # def submit_application(self):
-    #     if self.name == '/':
-    #         sequence_id = self.env['purchase.request'].search([('code', '=', 'your.sequence.code')])
-    #         sequence_pool = self.env['purchase.request']
-    #         name = sequence_pool.sudo().get_id(sequence_id.id)
-    #         self.write({'name': name})
     @api.depends('order_request_line.price_subtotal')
     def _amount_all(self):
         for order in self:
