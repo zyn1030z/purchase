@@ -15,7 +15,8 @@ class PurchaseRequest(models.Model):
     # check_by = fields.Char(string='Người duyệt')
     check_by = fields.Many2one('res.users', 'Người duyệt', default=lambda self: self.env.user)
     # department = fields.Char(string='Bộ phận')
-    department = fields.Many2one('hr.department', "Bộ phận",default=lambda self: self.env.user.employee_ids.department_id)
+    department = fields.Many2one('hr.department', "Bộ phận",
+                                 default=lambda self: self.env.user.employee_ids.department_id)
     cost_total = fields.Char(string='Tổng chi phí', compute='_amount_all')
     creation_date = fields.Date(string='Ngày yêu cầu', default=datetime.today())
     due_date = fields.Date(string='Ngày cần cấp')
@@ -25,6 +26,7 @@ class PurchaseRequest(models.Model):
         ('waiting_for_approval', 'Chờ duyệt'),
         ('approved', 'Đã phê duyệt'),
         ('complete', 'Hoàn thành'),
+        ('reject', 'Từ chối'),
         ('cancel', 'Hủy')],
         string='Tình trạng sử dụng', default='draft', track_visibility='always')
     company = fields.Char(string='Công ty', readonly=True)
@@ -67,3 +69,6 @@ class PurchaseRequest(models.Model):
             for line in order.order_request_line:
                 amount_total += line.price_subtotal
             order.cost_total = amount_total
+
+    def test1(self):
+        print('test')

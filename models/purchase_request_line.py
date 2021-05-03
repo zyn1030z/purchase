@@ -25,4 +25,3 @@ class PurchaseRequestLine(models.Model):
         for line in self:
             total = line.product_qty * line.price_unit
             line.price_subtotal = total
-
