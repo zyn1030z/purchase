@@ -6,7 +6,8 @@ from datetime import datetime
 class PurchaseRequest(models.Model):
     _name = 'purchase.request'
     _description = "Purchase Request"
-    name = fields.Char(string='Số phiếu', defalt='/', readonly=False)
+    # name = fields.Char(string='Số phiếu', default='/', readonly=False)
+    name = fields.Char('Số phiếu', readonly=True, select=True, copy=False, default='New ')
 
     # request_by = fields.Char(string='Người yêu cầu', default=lambda self: self.env.user.name)
     request_by = fields.Many2one('res.users', 'Người yêu cầu', default=lambda self: self.env.user)
@@ -30,13 +31,39 @@ class PurchaseRequest(models.Model):
     # room_booking_ids = fields.One2many('purchase.request.line', 'room_booking_id', string='Danh sách phòng')
     @api.depends('creation_date')
     def __compute_purchase_request_sequence_number_next(self):
-        pass
+        system_user = self.env.is_system()
+        print('system_user', system_user)
 
+    # @api.model
+    # def create(self, vals_list):
+    #     # vals_list = {'name': 'test'}
+    #     obj = super(PurchaseRequest, self).create(vals_list)
+    #     if obj.name == '/':
+    #         # number = 'PR.200806.0001'
+    #         # obj.write({'name': number})
+    #         # sequence_id = self.env['purchase.request'].search([('code', '=', 'your.sequence.code')])
+    #         sequence_pool = self.env['ir.sequence']
+    #         print('sequence_pool', sequence_pool)
+    #
+    #         d_to = datetime.today()
+    #         # name = 'PR.200806.0001'
+    #         name = 'PR.' + str(d_to.year)[-2:] + str(d_to.month) + str(d_to.day)
+    #         print(name)
+    #         obj.write({'name': name})
+    #     return obj
     @api.model
-    def create(self, vals_list):
-        vals_list = {'name': 'test'}
-        obj = super(PurchaseRequest, self).create(vals_list)
-        # if obj.name == '/':
-        #     number = 'test'
-        #     obj.write({'name': number})
-        return obj
+    def create(self, vals):
+        seq = self.env['ir.sequence'].next_by_code('purchase.request.seq') or '/'
+        d_to = datetime.today()
+        name = 'PR.200806.0001'
+        name = 'PR.' + str(d_to.year)[-2:] + str(d_to.month) + str(d_to.day)
+        print(type(seq))
+        vals['name'] = name + '.'+seq
+        return super(PurchaseRequest, self).create(vals)
+
+    # def submit_application(self):
+    #     if self.name == '/':
+    #         sequence_id = self.env['purchase.request'].search([('code', '=', 'your.sequence.code')])
+    #         sequence_pool = self.env['purchase.request']
+    #         name = sequence_pool.sudo().get_id(sequence_id.id)
+    #         self.write({'name': name})
