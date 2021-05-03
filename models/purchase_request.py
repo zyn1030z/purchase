@@ -6,6 +6,7 @@ from datetime import datetime
 class PurchaseRequest(models.Model):
     _name = 'purchase.request'
     _description = "Purchase Request"
+    _inherit = ['mail.thread']
     # name = fields.Char(string='Số phiếu', default='/', readonly=False)
     name = fields.Char('Số phiếu', readonly=True, select=True, copy=False, default='New ')
 
@@ -27,12 +28,9 @@ class PurchaseRequest(models.Model):
         string='Tình trạng sử dụng', default='draft', track_visibility='always')
     company = fields.Char(string='Công ty', readonly=True)
     reject_reason = fields.Char(string='Lý do từ chối duyệt')
-
-    # room_booking_ids = fields.One2many('purchase.request.line', 'room_booking_id', string='Danh sách phòng')
-    @api.depends('creation_date')
-    def __compute_purchase_request_sequence_number_next(self):
-        system_user = self.env.is_system()
-        print('system_user', system_user)
+    # order_request_line = fields.One2many('purchase.request.line', 'order_request_id', string='Order Lines', copy=True)
+    order_request_line = fields.One2many(comodel_name='purchase.request.line', inverse_name='order_request_id',
+                                         string='Order Lines', )
 
     # @api.model
     # def create(self, vals_list):
@@ -58,7 +56,7 @@ class PurchaseRequest(models.Model):
         name = 'PR.200806.0001'
         name = 'PR.' + str(d_to.year)[-2:] + str(d_to.month) + str(d_to.day)
         print(type(seq))
-        vals['name'] = name + '.'+seq
+        vals['name'] = name + '.' + seq
         return super(PurchaseRequest, self).create(vals)
 
     # def submit_application(self):

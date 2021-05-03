@@ -61,28 +61,26 @@
                                 <field name="company"/>
                             </group>
                         </group>
-                        <!--                        <notebook>-->
-                        <!--                            <page name="room_ids" string="Danh sách phòng thuê">-->
-                        <!--                                <group>-->
-                        <!--                                    <field name="room_booking_ids" nolabel="1">-->
-                        <!--                                        <tree string="Danh sách phòng" editable="bottom">-->
-                        <!--                                            <field name="customer_id"/>-->
-                        <!--                                            <field name="identify_number"/>-->
-                        <!--                                            <field name="phone"/>-->
-                        <!--                                            <field name="number_of_persons"/>-->
-                        <!--                                            <field name="room_id"/>-->
-                        <!--                                            <field name="room_type"/>-->
-                        <!--                                            <field name="room_view"/>-->
-                        <!--                                            <field name="room_price"/>-->
-                        <!--                                            <field name="start_date"/>-->
-                        <!--                                            <field name="end_date"/>-->
-                        <!--                                            <field name="state"/>-->
-                        <!--                                        </tree>-->
-                        <!--                                    </field>-->
-                        <!--                                </group>-->
-                        <!--                            </page>-->
-                        <!--                        </notebook>-->
+                        <notebook>
+                            <page string="Chi tiết">
+                                <field name="order_request_line">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="unit_measure"/>
+                                        <field name="product_qty"/>
+                                        <field name="price_unit"/>
+                                        <field name="price_subtotal"/>
+                                        <field name="due_date"/>
+                                        <field name="description"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
