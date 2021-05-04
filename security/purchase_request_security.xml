@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="purchase_request_category">
+            <field name="name">Purchase Request</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="group_purchase_request_admin_department" model="res.groups">
+            <field name="name">Admin Department</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="purchase_request_category"/>
+        </record>
+
+        <record id="group_purchase_request_head_department" model="res.groups">
+            <field name="name">Head Department</field>
+            <field name="category_id" ref="purchase_request_category"/>
+            <field name="implied_ids" eval="[(4, ref('group_purchase_request_admin_department'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

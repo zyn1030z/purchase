@@ -27,9 +27,9 @@
                         <button string="Từ chối" type="object" states='waiting_for_approval'
                                 class="oe_highlight" name="reject_purchase_request"/>
                         <button string="Hoàn thành" type="object" states='approved'
-                                class="oe_highlight"/>
+                                class="oe_highlight" name="approved_function"/>
                         <button string="Hủy bỏ" type="object" states='approved'
-                                class="oe_highlight"/>
+                                class="oe_highlight" name="cancel_function"/>
                         <button string="Chuyển về dự thảo" type="object" states='reject, cancel'
                                 class="oe_highlight"/>
                         <!--                        <field name="state" widget="statusbar"-->

@@ -15,6 +15,7 @@
         'account'
     ],
     'data': [
+        'security/purchase_request_security.xml',
         'security/ir.model.access.csv',
         'views/purchase_request.xml',
         # 'data/sequence.xml'

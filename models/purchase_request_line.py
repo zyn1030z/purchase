@@ -32,3 +32,4 @@ class PurchaseRequestLine(models.Model):
     def test(self):
         if not self.product_id:
             return
+        print('test onchange')

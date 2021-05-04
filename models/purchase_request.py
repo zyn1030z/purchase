@@ -23,7 +23,7 @@ class PurchaseRequest(models.Model):
     state = fields.Selection([
         ('draft', 'Dự thảo'),
         ('waiting_for_approval', 'Chờ duyệt'),
-        ('approved', 'Đã phê duyệt'),
+        ('approved', 'Đã duyệt'),
         ('complete', 'Hoàn thành'),
         ('reject', 'Từ chối'),
         ('cancel', 'Hủy')],
@@ -33,6 +33,7 @@ class PurchaseRequest(models.Model):
     # order_request_line = fields.One2many('purchase.request.line', 'order_request_id', string='Order Lines', copy=True)
     order_request_line = fields.One2many(comodel_name='purchase.request.line', inverse_name='order_request_id',
                                          string='Order Lines', )
+
     # @api.model
     # def create(self, vals_list):
     #     # vals_list = {'name': 'test'}
@@ -78,3 +79,10 @@ class PurchaseRequest(models.Model):
     def reject_purchase_request(self):
         for rec in self:
             rec.state = 'draft'
+
+    def approved_function(self):
+        for rec in self:
+            rec.state = 'complete'
+
+    def cancel_function(self):
+        print('test cancel')
