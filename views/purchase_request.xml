@@ -18,7 +18,7 @@
             <field name="name">purchase.request.form</field>
             <field name="model">purchase.request</field>
             <field name="arch" type="xml">
-                <form string="Purchase Request" attrs="{'edit': [('states','=','draft')]}">
+                <form string="Purchase Request">
                     <header>
                         <button string="Gửi duyệt" type="object" states='draft'
                                 class="oe_highlight" name="test1"/>
