@@ -21,20 +21,24 @@
                 <form string="Purchase Request">
                     <header>
                         <button string="Gửi duyệt" type="object" states='draft'
-                                class="oe_highlight" name="test1"/>
+                                class="oe_highlight" name="send_approve_purchase_request"/>
                         <button string="Phê duyệt" type="object" states='waiting_for_approval'
-                                class="oe_highlight"/>
+                                class="oe_highlight" name="approve_purchase_request"/>
                         <button string="Từ chối" type="object" states='waiting_for_approval'
-                                class="oe_highlight"/>
+                                class="oe_highlight" name="reject_purchase_request"/>
                         <button string="Hoàn thành" type="object" states='approved'
                                 class="oe_highlight"/>
                         <button string="Hủy bỏ" type="object" states='approved'
                                 class="oe_highlight"/>
                         <button string="Chuyển về dự thảo" type="object" states='reject, cancel'
                                 class="oe_highlight"/>
+                        <!--                        <field name="state" widget="statusbar"-->
+                        <!--                               statusbar_visible="draft,waiting_for_approval,approved,complete,reject,cancel"-->
+                        <!--                               clickable="true"/>-->
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,waiting_for_approval,approved,complete,reject,cancel"
-                               clickable="true"/>
+                               clickable="true"
+                        />
                     </header>
                     <sheet>
                         <div>
@@ -70,6 +74,9 @@
                                         <field name="price_subtotal"/>
                                         <field name="due_date"/>
                                         <field name="description"/>
+                                        <!--                                        <field name="delivered_qty" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
+                                        <field name="delivered_qty"/>
+                                        <!--                                        attrs="{'invisible':[('state', '=', 'draft')]}"-->
                                     </tree>
                                 </field>
                             </page>
@@ -90,7 +97,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="hotel_room_booking_menu" name="Purchase Request Menu"
+        <menuitem id="hotel_room_booking_menu" name="Purchase Request"
                   action="purchase_request_act" sequence="1"/>
     </data>
 </odoo>

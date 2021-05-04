@@ -4,7 +4,9 @@ from odoo import fields, models, api
 class PurchaseRequestLine(models.Model):
     _name = 'purchase.request.line'
     _description = "Purchase Request"
-    _inherit = ['mail.thread']
+    _inherit = [
+        'mail.thread'
+    ]
     product_id = fields.Many2one('product.product', string='Sản phẩm', change_default=True)
     taxes_id = fields.Many2many('account.tax', string='Taxes',
                                 domain=['|', ('active', '=', False), ('active', '=', True)])
@@ -25,3 +27,8 @@ class PurchaseRequestLine(models.Model):
         for line in self:
             total = line.product_qty * line.price_unit
             line.price_subtotal = total
+
+    @api.onchange('product_id')
+    def test(self):
+        if not self.product_id:
+            return
