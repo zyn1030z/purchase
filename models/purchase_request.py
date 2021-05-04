@@ -79,6 +79,14 @@ class PurchaseRequest(models.Model):
     def reject_purchase_request(self):
         for rec in self:
             rec.state = 'draft'
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Lý do từ chối',
+            'res_model': 'reject.reason',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'target': 'new',
+        }
 
     def approved_function(self):
         for rec in self:
@@ -87,9 +95,8 @@ class PurchaseRequest(models.Model):
     def cancel_function(self):
         print('test cancel')
 
-
-class RejectReason(models.Model):
-    _name = 'reject.reason'
-    _description = 'Reject Reason'
-    date_reject_reason = fields.Date(string='Ngày', default=datetime.today())
-    reason_reject_reason = fields.Text(string='Lý do', required=True)
+    class RejectReason(models.Model):
+        _name = 'reject.reason'
+        _description = 'Reject Reason'
+        date_reject_reason = fields.Date(string='Ngày', default=datetime.today())
+        reason_reject_reason = fields.Text(string='Lý do', required=True)

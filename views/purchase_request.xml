@@ -25,7 +25,8 @@
                         <button string="Phê duyệt" type="object" states='waiting_for_approval'
                                 class="oe_highlight" name="approve_purchase_request"/>
                         <button string="Từ chối" type="object" states='waiting_for_approval'
-                                class="oe_highlight" name="reject_purchase_request"/>
+                                class="oe_highlight" name="reject_purchase_request"
+                        />
                         <button string="Hoàn thành" type="object" states='approved'
                                 class="oe_highlight" name="approved_function"/>
                         <button string="Hủy bỏ" type="object" states='approved'
