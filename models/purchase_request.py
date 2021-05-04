@@ -86,3 +86,10 @@ class PurchaseRequest(models.Model):
 
     def cancel_function(self):
         print('test cancel')
+
+
+class RejectReason(models.Model):
+    _name = 'reject.reason'
+    _description = 'Reject Reason'
+    date_reject_reason = fields.Date(string='Ngày', default=datetime.today())
+    reason_reject_reason = fields.Text(string='Lý do', required=True)
