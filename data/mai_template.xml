@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="email_template_purchase_request_invoice" model="mail.template">
+            <field name="name">Invoice e-mail template</field>
+            <field name="email_from">${object.code_invoice and object.code_booking or ''}</field>
+            <field name="subject">${object.name}</field>
+            <field name="email_to">${object.code_booking.customer_id.cus_email|safe}</field>
+            <field name="lang">${object.lang}</field>
+            <field name="model_id" ref="quanlykhachsan.model_hotel_invoice"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Dear ${(object.name)},<br/><br/>
+                ]]>
+            </field>
+        </record>
+
+    </data>
+</odoo>
