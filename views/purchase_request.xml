@@ -13,7 +13,6 @@
                 </tree>
             </field>
         </record>
-
         <record id="purchase_request_form" model="ir.ui.view">
             <field name="name">purchase.request.form</field>
             <field name="model">purchase.request</field>
@@ -33,12 +32,10 @@
                                 class="oe_highlight" name="cancel_function"/>
                         <button string="Chuyển về dự thảo" type="object" states='reject, cancel'
                                 class="oe_highlight"/>
-                        <!--                        <field name="state" widget="statusbar"-->
-                        <!--                               statusbar_visible="draft,waiting_for_approval,approved,complete,reject,cancel"-->
-                        <!--                               clickable="true"/>-->
+
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,waiting_for_approval,approved,complete,reject,cancel"
-                               clickable="true"
+                               clickable="false"
                         />
                     </header>
                     <sheet>
@@ -79,6 +76,11 @@
                                 </field>
                             </page>
                         </notebook>
+                        <group>
+                            <group>
+                                <field name="reject_reason_request"/>
+                            </group>
+                        </group>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>

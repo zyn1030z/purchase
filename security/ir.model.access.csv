@@ -4,3 +4,10 @@ access_purchase_request_line,access.purchase.request.line,model_purchase_request
 access_purchase_request_reject_reason,access.purchase.request.reject.reason,model_reject_reason,,1,1,1,1
 
 access_purchase_request_admin,purchase.request.admin,model_purchase_request,group_purchase_request_admin_department,1,1,1,0
+access_purchase_request_head,purchase.request.head,model_purchase_request,group_purchase_request_head_department,1,1,1,1
+
+access_purchase_request_line_admin,purchase.request.line.admin,model_purchase_request_line,group_purchase_request_admin_department,1,1,1,0
+access_purchase_request_line_head,purchase.request.line.head,model_purchase_request_line,group_purchase_request_head_department,1,1,1,1
+
+access_reject_reason_admin,purchase.reject.reason.admin,model_reject_reason,group_purchase_request_admin_department,1,1,1,0
+access_reject_reason_head,purchase.reject.reason.head,model_reject_reason,group_purchase_request_head_department,1,1,1,1

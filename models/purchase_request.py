@@ -14,10 +14,10 @@ class PurchaseRequest(models.Model):
     # check_by = fields.Char(string='Người duyệt')
     check_by = fields.Many2one('res.users', 'Người duyệt', default=lambda self: self.env.user)
     # department = fields.Char(string='Bộ phận')
-    department = fields.Many2one('hr.department', "Bộ phận",
+    department = fields.Many2one('hr.department', "Depatment",
                                  default=lambda self: self.env.user.employee_ids.department_id)
-    cost_total = fields.Char(string='Tổng chi phí', compute='_amount_all')
-    creation_date = fields.Date(string='Ngày yêu cầu', default=datetime.today())
+    cost_total = fields.Char(string='Total cost', compute='_amount_all')
+    creation_date = fields.Date(string='Request Date', default=datetime.today())
     due_date = fields.Date(string='Ngày cần cấp')
     approved_date = fields.Date(string='Ngày phê duyệt')
     state = fields.Selection([
@@ -33,6 +33,9 @@ class PurchaseRequest(models.Model):
     # order_request_line = fields.One2many('purchase.request.line', 'order_request_id', string='Order Lines', copy=True)
     order_request_line = fields.One2many(comodel_name='purchase.request.line', inverse_name='order_request_id',
                                          string='Order Lines', )
+    # reject_reason_request = fields.Many2one('reject.reason', string='Reject Reason',
+    #                                         default=lambda self: self.env['reject.reason'].search([], limit=1))
+    reject_reason_request = fields.Many2one('reject.reason', string='Reject Reason')
 
     # @api.model
     # def create(self, vals_list):
@@ -95,8 +98,9 @@ class PurchaseRequest(models.Model):
     def cancel_function(self):
         print('test cancel')
 
-    class RejectReason(models.Model):
-        _name = 'reject.reason'
-        _description = 'Reject Reason'
-        date_reject_reason = fields.Date(string='Ngày', default=datetime.today())
-        reason_reject_reason = fields.Text(string='Lý do', required=True)
+
+class RejectReason(models.Model):
+    _name = 'reject.reason'
+    _description = 'Reject Reason'
+    date_reject_reason = fields.Date(string='Ngày', default=datetime.today())
+    reason_reject_reason = fields.Text(string='Lý do', required=True)
