@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    <record id="view_hr_wizard" model="ir.ui.view">
-        <field name="name">Pdf.generation.form</field>
+<!--    <record id="reject_reason_wizard" model="ir.ui.view">-->
+<!--        <field name="name">Pdf.generation.form</field>-->
+<!--        <field name="model">reject.reason</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="generation fichier">-->
+<!--                <group>-->
+<!--                    <field name="reason_reject_reason"/>-->
+<!--                    <field name="date_reject_reason"/>-->
+<!--                </group>-->
+<!--                <footer>-->
+<!--                    <button string="OK" special="cancel" class="oe_highlight"/>-->
+<!--                </footer>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="reject_reason_view_form" model="ir.ui.view">
+        <field name="name">reject_reason_view_form</field>
         <field name="model">reject.reason</field>
         <field name="arch" type="xml">
-            <form string="generation fichier">
-                <group>
-                    <field name="reason_reject_reason"/>
-                    <field name="date_reject_reason"/>
-                    <field name="owner_id"/>
-                </group>
-                <footer>
-                    <button string="OK" special="cancel" class="oe_highlight"/>
-                </footer>
+            <form string="reject_reason_form">
+                <sheet>
+                    <group>
+                        <field name="date_reject_reason"/>
+                        <field name="reason_reject_reason"/>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>

@@ -18,7 +18,7 @@
         'security/purchase_request_security.xml',
         'security/ir.model.access.csv',
         'views/purchase_request.xml',
-        # 'views/reject_reason.xml',
+        'views/reject_reason.xml',
         'reports/report.xml',
         # 'data/sequence.xml'
     ],

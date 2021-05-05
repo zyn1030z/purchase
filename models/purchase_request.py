@@ -87,14 +87,7 @@ class PurchaseRequest(models.Model):
             rec.state = 'draft'
             # print('test reject', self.id)
             # print(self.env['reject.reason'].search([('owner_id', '=', 96)]))
-            # return {
-            #     'type': 'ir.actions.act_window',
-            #     'name': 'Lý do từ chối',
-            #     'res_model': 'reject.reason',
-            #     'view_type': 'form',
-            #     'view_mode': 'form',
-            #     'target': 'new',
-            # }
+
             return {
                 'name': 'Reject Reason',
                 'type': 'ir.actions.act_window',
