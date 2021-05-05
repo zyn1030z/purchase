@@ -11,11 +11,11 @@ class PurchaseRequest(models.Model):
     request_by = fields.Many2one('res.users', 'Request User', default=lambda self: self.env.user)
     check_by = fields.Many2one('res.users', 'Approved User', default=lambda self: self.env.user)
     department = fields.Many2one('hr.department', "Department",
-                                 default=lambda self: self.env.user.employee_ids.department_id)
+                                 default=lambda self: self.env.user.department_id)
     cost_total = fields.Char(string='Total cost', compute='_amount_all')
     creation_date = fields.Date(string='Request Date', default=datetime.today())
     due_date = fields.Date(string='Due date')
-    approved_date = fields.Date(string='Approved Date')
+    approved_date = fields.Date(string='Approved Date', readonly=1)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('waiting_for_approval', 'Waiting for approval'),
@@ -39,7 +39,6 @@ class PurchaseRequest(models.Model):
     reject_reason_request1 = fields.Char(compute='reject_function', string='Rejection reason')
 
     # reject_reason_request = fields.Char(related='reject_reason_id.reason_reject_reason')
-
     # @api.model
     # def create(self, vals_list):
     #     # vals_list = {'name': 'test'}
@@ -62,7 +61,6 @@ class PurchaseRequest(models.Model):
         seq = self.env['ir.sequence'].next_by_code('purchase.request.seq') or '/'
         d_to = datetime.today()
         name = 'PR.' + str(d_to.year)[-2:] + str(d_to.month) + str(d_to.day)
-        print(type(seq))
         vals['name'] = name + '.' + seq
         return super(PurchaseRequest, self).create(vals)
 
@@ -81,6 +79,7 @@ class PurchaseRequest(models.Model):
     def approve_purchase_request(self):
         for rec in self:
             rec.state = 'approved'
+            rec.approved_date = datetime.today()
 
     def reject_purchase_request(self):
         for rec in self:
