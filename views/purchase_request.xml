@@ -10,6 +10,7 @@
                     <field name="request_by"/>
                     <field name="department"/>
                     <field name="cost_total"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
@@ -19,24 +20,24 @@
             <field name="arch" type="xml">
                 <form string="Purchase Request">
                     <header>
-                        <button string="Gửi duyệt" type="object" states='draft'
-                                class="oe_highlight" name="send_approve_purchase_request"/>
-                        <button string="Phê duyệt" type="object" states='waiting_for_approval'
-                                class="oe_highlight" name="approve_purchase_request"/>
-                        <button string="Từ chối" type="object" states='waiting_for_approval'
+                        <button string="Send" type="object" states='draft'
+                                class="oe_highlight" name="send_approve_purchase_request"
+                                groups="purchase_request.group_purchase_request_admin_department"/>
+                        <button string="Approve" type="object" states='waiting_for_approval'
+                                class="oe_highlight" name="approve_purchase_request"
+                                groups="purchase_request.group_purchase_request_head_department"/>
+                        <button string="Reject" type="object" states='waiting_for_approval'
                                 class="oe_highlight" name="reject_purchase_request"
-                        />
-                        <button string="Hoàn thành" type="object" states='approved'
+                                groups="purchase_request.group_purchase_request_head_department"/>
+                        <button string="Complete" type="object" states='approved'
                                 class="oe_highlight" name="approved_function"/>
-                        <button string="Hủy bỏ" type="object" states='approved'
+                        <button string="Cancel" type="object" states='approved'
                                 class="oe_highlight" name="cancel_function"/>
-                        <button string="Chuyển về dự thảo" type="object" states='reject, cancel'
+                        <button string="Redirect draft" type="object" states='reject, cancel'
                                 class="oe_highlight"/>
-
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,waiting_for_approval,approved,complete,reject,cancel"
-                               clickable="false"
-                        />
+                               clickable="false"/>
                     </header>
                     <sheet>
                         <div>

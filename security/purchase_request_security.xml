@@ -17,10 +17,10 @@
             <field name="name">Head Department</field>
             <field name="category_id" ref="purchase_request_category"/>
             <field name="implied_ids" eval="[(4, ref('group_purchase_request_admin_department'))]"/>
-            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>
 
-        <record model="ir.rule" id="hotel_room_user_rule">
+        <record model="ir.rule" id="purchase_request_user_rule">
             <field name="name">Purchase request: see only own request</field>
             <field name="model_id" ref="model_purchase_request"/>
             <field name="groups" eval="[(4, ref('group_purchase_request_admin_department'))]"/>
@@ -29,7 +29,7 @@
             </field>
         </record>
 
-        <record model="ir.rule" id="hotel_room_all_rule">
+        <record model="ir.rule" id="purchase_request_all_rule">
             <field name="name">Purchase request: see all request</field>
             <field name="model_id" ref="model_purchase_request"/>
             <field name="groups"

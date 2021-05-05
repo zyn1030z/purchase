@@ -8,34 +8,35 @@ class PurchaseRequest(models.Model):
     _description = "Purchase Request"
     _inherit = ['mail.thread']
     # name = fields.Char(string='Số phiếu', default='/', readonly=False)
-    name = fields.Char('Số phiếu', readonly=True, select=True, copy=False, default='New ')
+    name = fields.Char('Code', readonly=True, select=True, copy=False, default='New ')
     # request_by = fields.Char(string='Người yêu cầu', default=lambda self: self.env.user.name)
-    request_by = fields.Many2one('res.users', 'Người yêu cầu', default=lambda self: self.env.user)
+    request_by = fields.Many2one('res.users', 'Request User', default=lambda self: self.env.user)
     # check_by = fields.Char(string='Người duyệt')
-    check_by = fields.Many2one('res.users', 'Người duyệt', default=lambda self: self.env.user)
+    check_by = fields.Many2one('res.users', 'Approved User', default=lambda self: self.env.user)
     # department = fields.Char(string='Bộ phận')
-    department = fields.Many2one('hr.department', "Depatment",
+    department = fields.Many2one('hr.department', "Department",
                                  default=lambda self: self.env.user.employee_ids.department_id)
     cost_total = fields.Char(string='Total cost', compute='_amount_all')
     creation_date = fields.Date(string='Request Date', default=datetime.today())
-    due_date = fields.Date(string='Ngày cần cấp')
-    approved_date = fields.Date(string='Ngày phê duyệt')
+    due_date = fields.Date(string='Due date')
+    approved_date = fields.Date(string='Approved Date')
     state = fields.Selection([
-        ('draft', 'Dự thảo'),
-        ('waiting_for_approval', 'Chờ duyệt'),
-        ('approved', 'Đã duyệt'),
-        ('complete', 'Hoàn thành'),
-        ('reject', 'Từ chối'),
-        ('cancel', 'Hủy')],
-        string='Tình trạng sử dụng', default='draft', track_visibility='always')
-    company = fields.Char(string='Công ty', readonly=True)
-    reject_reason = fields.Char(string='Lý do từ chối duyệt')
+        ('draft', 'Draft'),
+        ('waiting_for_approval', 'Waiting for approval'),
+        ('approved', 'Approved'),
+        ('complete', 'Complete'),
+        ('reject', 'Reject'),
+        ('cancel', 'Cancel')],
+        string='Use status', default='draft', track_visibility='always')
+    company = fields.Char(string='Company', readonly=True)
+    reject_reason = fields.Char(string='Reject Reason')
     # order_request_line = fields.One2many('purchase.request.line', 'order_request_id', string='Order Lines', copy=True)
     order_request_line = fields.One2many(comodel_name='purchase.request.line', inverse_name='order_request_id',
                                          string='Order Lines', )
     # reject_reason_request = fields.Many2one('reject.reason', string='Reject Reason',
     #                                         default=lambda self: self.env['reject.reason'].search([], limit=1))
-    reject_reason_request = fields.Many2one('reject.reason', string='Reject Reason')
+    # reject_reason_request = fields.Many2one('reject.reason', string='Reject Reason')
+    reject_reason_request = fields.Char(string='Reject Reason', readonly=1)
 
     # @api.model
     # def create(self, vals_list):
@@ -82,25 +83,27 @@ class PurchaseRequest(models.Model):
     def reject_purchase_request(self):
         for rec in self:
             rec.state = 'draft'
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Lý do từ chối',
-            'res_model': 'reject.reason',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'target': 'new',
-        }
+            # return {
+            #     'type': 'ir.actions.act_window',
+            #     'name': 'Lý do từ chối',
+            #     'res_model': 'reject.reason',
+            #     'view_type': 'form',
+            #     'view_mode': 'form',
+            #     'target': 'new',
+            # }
+            return {
+                'name': 'Reject Reason',
+                'type': 'ir.actions.act_window',
+                'res_model': 'reject.reason',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'target': 'new'
+            }
 
     def approved_function(self):
         for rec in self:
             rec.state = 'complete'
 
     def cancel_function(self):
-        print('test cancel')
-
-
-class RejectReason(models.Model):
-    _name = 'reject.reason'
-    _description = 'Reject Reason'
-    date_reject_reason = fields.Date(string='Ngày', default=datetime.today())
-    reason_reject_reason = fields.Text(string='Lý do', required=True)
+        for rec in self:
+            rec.state = 'cancel'
