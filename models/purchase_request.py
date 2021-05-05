@@ -34,7 +34,7 @@ class PurchaseRequest(models.Model):
     #                                         default=lambda self: self.env['reject.reason'].search([], limit=1))
     reject_reason_request = fields.Char(string='reject reason', related='request_by.email')
 
-    reject_reason_request1 = fields.Char(compute='eject_function', string='Reject reason')
+    reject_reason_request1 = fields.Char(compute='reject_function', string='Reject reason')
 
     # reject_reason_id = fields.Many2one('reject.reason')
     # reject_reason_request = fields.Char(related='reject_reason_id.reason_reject_reason')
