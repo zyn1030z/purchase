@@ -79,7 +79,7 @@
                         </notebook>
                         <group>
                             <group>
-                                <field name="reject_reason_request"/>
+<!--                                <field name="reject_reason_request1"/>-->
                             </group>
                         </group>
                     </sheet>

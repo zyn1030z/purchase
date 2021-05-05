@@ -3,7 +3,7 @@ from datetime import datetime
 from odoo import models, fields, api
 
 
-class RejectReason(models.TransientModel):
+class RejectReason(models.Model):
     _name = 'reject.reason'
     _description = 'Reject Reason'
     date_reject_reason = fields.Date(string='Date', default=datetime.today())

@@ -34,6 +34,8 @@ class PurchaseRequest(models.Model):
     #                                         default=lambda self: self.env['reject.reason'].search([], limit=1))
     reject_reason_request = fields.Char(string='reject reason', related='request_by.email')
 
+    reject_reason_request1 = fields.Char(compute='eject_function', string='Reject reason')
+
     # reject_reason_id = fields.Many2one('reject.reason')
     # reject_reason_request = fields.Char(related='reject_reason_id.reason_reject_reason')
 
@@ -82,6 +84,8 @@ class PurchaseRequest(models.Model):
     def reject_purchase_request(self):
         for rec in self:
             rec.state = 'draft'
+            # print('test reject', self.id)
+            # print(self.env['reject.reason'].search([('owner_id', '=', 96)]))
             # return {
             #     'type': 'ir.actions.act_window',
             #     'name': 'Lý do từ chối',
@@ -106,3 +110,9 @@ class PurchaseRequest(models.Model):
     def cancel_function(self):
         for rec in self:
             rec.state = 'cancel'
+
+    def reject_function(self):
+        for rc in self:
+            reject = self.env['reject.reason'].search([('owner_id', '=', self.id)]).reason_reject_reason
+            print(reject)
+            rc.reject_reason_request1 = reject
