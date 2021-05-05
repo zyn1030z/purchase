@@ -27,7 +27,6 @@ class PurchaseRequest(models.Model):
         string='Use status', default='draft', track_visibility='always')
     company = fields.Char(string='Company', readonly=True)
     reject_reason = fields.Char(string='Reject Reason')
-
     # order_request_line = fields.One2many('purchase.request.line', 'order_request_id', string='Order Lines', copy=True)
     order_request_line = fields.One2many(comodel_name='purchase.request.line', inverse_name='order_request_id',
                                          string='Order Lines', )
