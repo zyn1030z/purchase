@@ -9,11 +9,8 @@ class PurchaseRequest(models.Model):
     _inherit = ['mail.thread']
     # name = fields.Char(string='Số phiếu', default='/', readonly=False)
     name = fields.Char('Code', readonly=True, select=True, copy=False, default='New ')
-    # request_by = fields.Char(string='Người yêu cầu', default=lambda self: self.env.user.name)
     request_by = fields.Many2one('res.users', 'Request User', default=lambda self: self.env.user)
-    # check_by = fields.Char(string='Người duyệt')
     check_by = fields.Many2one('res.users', 'Approved User', default=lambda self: self.env.user)
-    # department = fields.Char(string='Bộ phận')
     department = fields.Many2one('hr.department', "Department",
                                  default=lambda self: self.env.user.employee_ids.department_id)
     cost_total = fields.Char(string='Total cost', compute='_amount_all')
@@ -30,13 +27,16 @@ class PurchaseRequest(models.Model):
         string='Use status', default='draft', track_visibility='always')
     company = fields.Char(string='Company', readonly=True)
     reject_reason = fields.Char(string='Reject Reason')
+
     # order_request_line = fields.One2many('purchase.request.line', 'order_request_id', string='Order Lines', copy=True)
     order_request_line = fields.One2many(comodel_name='purchase.request.line', inverse_name='order_request_id',
                                          string='Order Lines', )
     # reject_reason_request = fields.Many2one('reject.reason', string='Reject Reason',
     #                                         default=lambda self: self.env['reject.reason'].search([], limit=1))
-    # reject_reason_request = fields.Many2one('reject.reason', string='Reject Reason')
-    reject_reason_request = fields.Char(string='Reject Reason', readonly=1)
+    reject_reason_request = fields.Char(string='reject reason', related='request_by.email')
+
+    # reject_reason_id = fields.Many2one('reject.reason')
+    # reject_reason_request = fields.Char(related='reject_reason_id.reason_reject_reason')
 
     # @api.model
     # def create(self, vals_list):
