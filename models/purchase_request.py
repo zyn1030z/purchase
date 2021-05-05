@@ -7,7 +7,6 @@ class PurchaseRequest(models.Model):
     _name = 'purchase.request'
     _description = "Purchase Request"
     _inherit = ['mail.thread']
-    # name = fields.Char(string='Số phiếu', default='/', readonly=False)
     name = fields.Char('Code', readonly=True, select=True, copy=False, default='New ')
     request_by = fields.Many2one('res.users', 'Request User', default=lambda self: self.env.user)
     check_by = fields.Many2one('res.users', 'Approved User', default=lambda self: self.env.user)
@@ -21,22 +20,24 @@ class PurchaseRequest(models.Model):
         ('draft', 'Draft'),
         ('waiting_for_approval', 'Waiting for approval'),
         ('approved', 'Approved'),
-        ('complete', 'Complete'),
+        ('complete', 'Completed'),
         ('reject', 'Reject'),
         ('cancel', 'Cancel')],
         string='Use status', default='draft', track_visibility='always')
-    company = fields.Char(string='Company', readonly=True)
-    reject_reason = fields.Char(string='Reject Reason')
+    # company = fields.Char(string='Company', readonly=False)
+    company_id = fields.Many2one(
+        'res.company',
+        'Company',
+        default=lambda self: self.env.user.company_id,
+        readonly=1
+    )
+    reject_reason = fields.Char(string='Rejection Reason')
     # order_request_line = fields.One2many('purchase.request.line', 'order_request_id', string='Order Lines', copy=True)
     order_request_line = fields.One2many(comodel_name='purchase.request.line', inverse_name='order_request_id',
                                          string='Order Lines', )
-    # reject_reason_request = fields.Many2one('reject.reason', string='Reject Reason',
-    #                                         default=lambda self: self.env['reject.reason'].search([], limit=1))
-    reject_reason_request = fields.Char(string='reject reason', related='request_by.email')
 
-    reject_reason_request1 = fields.Char(compute='reject_function', string='Reject reason')
+    reject_reason_request1 = fields.Char(compute='reject_function', string='Rejection reason')
 
-    # reject_reason_id = fields.Many2one('reject.reason')
     # reject_reason_request = fields.Char(related='reject_reason_id.reason_reject_reason')
 
     # @api.model
@@ -114,5 +115,4 @@ class PurchaseRequest(models.Model):
     def reject_function(self):
         for rc in self:
             reject = self.env['reject.reason'].search([('owner_id', '=', self.id)]).reason_reject_reason
-            print(reject)
             rc.reject_reason_request1 = reject

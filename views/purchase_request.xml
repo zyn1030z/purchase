@@ -41,7 +41,7 @@
                     </header>
                     <sheet>
                         <div>
-                            <label for="month" string="Mã phiếu"
+                            <label for="month" string="Code"
                                    style="font-weight: bold !important;margin-right:107px;margin-left:0px;"/>
                             <field name="name" class="oe_inline">
                             </field>
@@ -57,11 +57,11 @@
                                 <field name="creation_date"/>
                                 <field name="due_date"/>
                                 <field name="approved_date"/>
-                                <field name="company"/>
+                                <field name="company_id"/>
                             </group>
                         </group>
                         <notebook>
-                            <page string="Chi tiết">
+                            <page string="Details">
                                 <field name="order_request_line">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
