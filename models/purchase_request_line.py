@@ -18,10 +18,12 @@ class PurchaseRequestLine(models.Model):
                            related='order_request_id.due_date')
     description = fields.Text(string='Description')
     delivered_qty = fields.Float(string='Quantity delivered')
+
     # order_request_id = fields.Many2one('purchase.request', string='Purchase Request Reference',
     #                            ondelete='cascade')
     order_request_id = fields.Many2one(comodel_name='purchase.request', string='Purchase Request Reference',
                                        ondelete='cascade')
+    state = fields.Char('Use status', compute="_compute_state")
 
     @api.depends('product_qty', 'price_unit')
     def _compute_amount(self):
@@ -34,8 +36,10 @@ class PurchaseRequestLine(models.Model):
         for rec in self:
             if rec.order_request_id.due_date:
                 rec.due_date = rec.order_request_id.due_date
-# @api.onchange('product_id')
-# def test(self):
-#     if not self.product_id:
-#         return
-#     print('test onchange')
+
+    def _compute_state(self):
+        print(self.order_request_id)
+        self.state = self.order_request_id.state
+        # state_pr = self.env['purchase.request.line'].search([('order_request_id', '=', self.id)]).state
+        # print(state_pr)
+        # rec.state = state_pr

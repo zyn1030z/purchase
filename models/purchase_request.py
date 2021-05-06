@@ -7,7 +7,7 @@ class PurchaseRequest(models.Model):
     _name = 'purchase.request'
     _description = "Purchase Request"
     _inherit = ['mail.thread']
-    name = fields.Char('Code', readonly=True, select=True, copy=False, default='New ')
+    name = fields.Char('Code', readonly=True, select=True, copy=False, default='New')
     request_by = fields.Many2one('res.users', 'Request User', default=lambda self: self.env.user)
     check_by = fields.Many2one('res.users', 'Approved User', default=lambda self: self.env.user)
     department = fields.Many2one('hr.department', "Department",

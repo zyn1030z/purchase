@@ -71,7 +71,9 @@
                                         <field name="price_subtotal"/>
                                         <field name="due_date"/>
                                         <field name="description"/>
-                                        <field name="delivered_qty"/>
+                                        <field name="delivered_qty"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['approved','complete'])]}"/>
+                                        <!--                                        <field name="state"/>-->
                                         <!--                                        attrs="{'invisible':[('state', '=', 'draft')]}"-->
                                     </tree>
                                 </field>
@@ -98,7 +100,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="hotel_room_booking_menu" name="Purchase Request"
+        <menuitem id="purchase_request_menu" name="Purchase Request"
                   action="purchase_request_act" sequence="1"/>
     </data>
 </odoo>
