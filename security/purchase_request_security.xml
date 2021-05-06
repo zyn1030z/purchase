@@ -3,7 +3,7 @@
     <data>
 
         <record model="ir.module.category" id="purchase_request_category">
-            <field name="name">Purchase Request</field>
+            <field name="name">Purchase Request Group</field>
             <field name="sequence">1</field>
         </record>
 
