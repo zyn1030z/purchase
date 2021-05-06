@@ -2,6 +2,8 @@
 from odoo import models, fields, api, exceptions
 from datetime import datetime
 
+from odoo.exceptions import UserError
+
 
 class PurchaseRequest(models.Model):
     _name = 'purchase.request'
@@ -19,8 +21,8 @@ class PurchaseRequest(models.Model):
     state = fields.Selection([
         ('draft', 'Draft'),
         ('waiting_for_approval', 'Waiting for approval'),
-        ('approved', 'Approved'),
-        ('complete', 'Completed'),
+        ('approved', 'Approve'),
+        ('complete', 'Complete'),
         ('reject', 'Reject'),
         ('cancel', 'Cancel')],
         string='Use status', default='draft', track_visibility='always')

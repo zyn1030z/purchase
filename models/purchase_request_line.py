@@ -19,7 +19,6 @@ class PurchaseRequestLine(models.Model):
                            related='order_request_id.due_date')
     description = fields.Text(string='Description')
     delivered_qty = fields.Float(string='Quantity delivered')
-
     order_request_id = fields.Many2one(comodel_name='purchase.request', string='Purchase Request Reference',
                                        ondelete='cascade')
     state = fields.Char('Use status', compute="_compute_state")
@@ -43,15 +42,14 @@ class PurchaseRequestLine(models.Model):
         # print(state_pr)
         # rec.state = state_pr
 
-    @api.onchange('product_id', 'order_request_id')
+    @api.constrains('product_id')
     def _check_product_duplicate(self):
         for rec in self:
+            print(rec.order_request_id.id)
             print(rec.product_id.name)
             print(rec.product_id.id)
-            print(self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id),
-                                                            ('order_request_id', '=', rec.order_request_id.id)
+            print(self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id)
                                                             ]))
-
         # if self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id),
         #                                              ('order_request_id', '=', rec.order_request_id.id)
         #                                              ]):

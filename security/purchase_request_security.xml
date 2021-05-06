@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
+    <data noupdate="1">
 
         <record model="ir.module.category" id="purchase_request_category">
             <field name="name">Purchase Request Group</field>
@@ -21,7 +21,7 @@
         </record>
 
         <record model="ir.rule" id="purchase_request_user_rule">
-            <field name="name">Purchase request: see only own request</field>
+            <field name="name">Purchase request: se only own request</field>
             <field name="model_id" ref="model_purchase_request"/>
             <field name="groups" eval="[(4, ref('group_purchase_request_admin_department'))]"/>
             <field name="domain_force">
@@ -36,6 +36,20 @@
                    eval="[(4, ref('group_purchase_request_head_department'))]"/>
             <field name="domain_force">[(1, '=', 1)]</field>
         </record>
+
+        <record model="ir.rule" id="no_edit_in_waiting_approval_state">
+            <field name="name">No Edit in waiting for approval state</field>
+            <field ref="model_purchase_request" name="model_id"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="domain_force">['|', ('state', '=', 'waiting_for_approval'),
+                                        ('state', '=', 'approved'),
+                                        ('state', '=', 'reject')]</field>
+        </record>
+
     </data>
 
 </odoo>
