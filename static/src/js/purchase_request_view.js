@@ -11,7 +11,8 @@ odoo.define('my_module.MyCustomForm', function (require) {
             if (this.$buttons) {
                 if ((this.renderer.state.data.state !== 'waiting_for_approval') &&
                     (this.renderer.state.data.state !== 'approved') &&
-                    (this.renderer.state.data.state !== 'reject')) {
+                    (this.renderer.state.data.state !== 'reject') &&
+                    (this.renderer.state.data.state !== 'complete')) {
                     this.$buttons.find('.o_form_button_edit').show();
                 } else {
                     this.$buttons.find('.o_form_button_edit').hide();

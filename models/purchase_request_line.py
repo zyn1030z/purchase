@@ -42,19 +42,23 @@ class PurchaseRequestLine(models.Model):
         # print(state_pr)
         # rec.state = state_pr
 
-    @api.constrains('product_id')
+    @api.onchange('product_id')
     def _check_product_duplicate(self):
         for rec in self:
-            print(rec.order_request_id.id)
-            print(rec.product_id.name)
-            print(rec.product_id.id)
-            print(self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id)
-                                                            ]))
-        # if self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id),
-        #                                              ('order_request_id', '=', rec.order_request_id.id)
-        #                                              ]):
-        #     print('test')
-        # raise UserError('không được trùng sản phẩm')
+            if self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id)
+                                                         ]):
+                raise UserError(' You do not choose the same product')
+
+    # print(rec.order_request_id.id)
+    # print(rec.product_id.name)
+    # print(rec.product_id.id)
+    # print(self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id)
+    #                                                 ]))
+    # if self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id),
+    #                                              ('order_request_id', '=', rec.order_request_id.id)
+    #                                              ]):
+    #     print('test')
+    # raise UserError('không được trùng sản phẩm')
 
     @api.constrains('product_qty')
     def _check_product_qty(self):

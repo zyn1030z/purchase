@@ -114,9 +114,3 @@ class PurchaseRequest(models.Model):
         for rc in self:
             reject = self.env['reject.reason'].search([('owner_id', '=', self.id)]).reason_reject_reason
             rc.reject_reason_request1 = reject
-
-    # def write(self, vals):
-    #     if any(state == 'waiting_for_approval' for state in set(self.mapped('state'))):
-    #         raise UserError("No edit in waiting for approval state")
-    #     else:
-    #         return super(PurchaseRequest, self).write(vals)
