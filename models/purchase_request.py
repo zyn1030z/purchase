@@ -85,7 +85,7 @@ class PurchaseRequest(models.Model):
 
     def reject_purchase_request(self):
         for rec in self:
-            rec.state = 'draft'
+            rec.state = 'reject'
             # print('test reject', self.id)
             # print(self.env['reject.reason'].search([('owner_id', '=', 96)]))
 
@@ -101,6 +101,10 @@ class PurchaseRequest(models.Model):
     def approved_function(self):
         for rec in self:
             rec.state = 'complete'
+
+    def redirect_draft(self):
+        for rec in self:
+            rec.state = 'draft'
 
     def cancel_function(self):
         for rec in self:

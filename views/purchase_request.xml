@@ -36,7 +36,7 @@
                         <button string="Cancel" type="object" states='approved'
                                 class="oe_highlight" name="cancel_function"/>
                         <button string="Redirect draft" type="object" states='reject, cancel'
-                                class="oe_highlight"/>
+                                class="oe_highlight" name="redirect_draft"/>
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,waiting_for_approval,approved,complete,reject,cancel"
                                clickable="False"/>
