@@ -2,7 +2,7 @@
 from odoo import models, fields, api, exceptions
 from datetime import datetime
 
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class PurchaseRequest(models.Model):
@@ -114,3 +114,15 @@ class PurchaseRequest(models.Model):
         for rc in self:
             reject = self.env['reject.reason'].search([('owner_id', '=', self.id)]).reason_reject_reason
             rc.reject_reason_request1 = reject
+
+    @api.constrains('order_request_line')
+    def _check_exist_product_in_line(self):
+        for purchase in self:
+            exist_product_list = []
+            for line in purchase.order_request_line:
+                if line.product_id.id in exist_product_list:
+                    raise ValidationError('Product should be one per line.')
+                exist_product_list.append(line.product_id.id)
+
+    # _sql_constraints = [('order_product_uniq', 'unique (order_id,product_id)',
+    #                      'Duplicate products in order line not allowed !')]

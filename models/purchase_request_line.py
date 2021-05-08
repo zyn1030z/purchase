@@ -1,5 +1,5 @@
 from odoo import fields, models, api
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class PurchaseRequestLine(models.Model):
@@ -42,12 +42,17 @@ class PurchaseRequestLine(models.Model):
         # print(state_pr)
         # rec.state = state_pr
 
-    @api.onchange('product_id')
-    def _check_product_duplicate(self):
-        for rec in self:
-            if self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id)
-                                                         ]):
-                raise UserError(' You do not choose the same product')
+    # print(self.env['purchase.request.line'].search(
+
+    #     [('product_id', '=', rec.product_id.id), ('order_request_id', '=', self.order_request_id.id)
+    #      ]))
+
+    # if self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id)
+    #                                              ]):
+    #     print(self.env['purchase.request.line'].search(
+    #         [('product_id', '=', rec.product_id.id), ('order_request_id', '=', rec.order_request_id.id)
+    #          ]))
+    # raise UserError(' You do not choose the same product')
 
     # print(rec.order_request_id.id)
     # print(rec.product_id.name)
@@ -58,7 +63,7 @@ class PurchaseRequestLine(models.Model):
     #                                              ('order_request_id', '=', rec.order_request_id.id)
     #                                              ]):
     #     print('test')
-    # raise UserError('không được trùng sản phẩm')
+    # raise UserError('You do not choose the same product')
 
     @api.constrains('product_qty')
     def _check_product_qty(self):
