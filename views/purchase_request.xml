@@ -43,10 +43,12 @@
                     </header>
                     <sheet>
                         <div>
-                            <label for="month" string="Code"
-                                   style="font-weight: bold !important;margin-right:107px;margin-left:0px;"/>
-                            <field name="name" class="oe_inline">
-                            </field>
+                            <!--                            <label for="month" string="Code"-->
+                            <!--                                   style="font-weight: bold !important;margin-right:107px;margin-left:0px;"/>-->
+                            <h1>
+                                <field name="name" class="oe_inline">
+                                </field>
+                            </h1>
                         </div>
                         <group>
                             <group>

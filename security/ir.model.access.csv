@@ -1,10 +1,10 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 
-access_purchase_request_admin,purchase.request.admin,model_purchase_request,group_purchase_request_admin_department,1,1,1,0
+access_purchase_request_admin,purchase.request.admin,model_purchase_request,group_purchase_request_admin_department,1,1,1,1
 access_purchase_request_head,purchase.request.head,model_purchase_request,group_purchase_request_head_department,1,1,1,1
 
-access_purchase_request_line_admin,purchase.request.line.admin,model_purchase_request_line,group_purchase_request_admin_department,1,1,1,0
+access_purchase_request_line_admin,purchase.request.line.admin,model_purchase_request_line,group_purchase_request_admin_department,1,1,1,1
 access_purchase_request_line_head,purchase.request.line.head,model_purchase_request_line,group_purchase_request_head_department,1,1,1,1
 
 access_reject_reason_admin,purchase.reject.reason.admin,model_reject_reason,group_purchase_request_admin_department,1,1,1,0
