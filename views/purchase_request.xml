@@ -106,6 +106,7 @@
                                 <field name="due_date"/>
                                 <field name="approved_date"/>
                                 <field name="company_id"/>
+
                             </group>
                         </group>
                         <notebook>

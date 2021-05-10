@@ -39,6 +39,7 @@ class PurchaseRequest(models.Model):
                                          string='Order Lines', )
 
     reject_reason_request1 = fields.Char(compute='reject_function', string='Rejection reason')
+    context = fields.Text(default='{}', required=True)
 
     # reject_reason_request = fields.Char(related='reject_reason_id.reason_reject_reason')
     # @api.model

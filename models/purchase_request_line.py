@@ -14,7 +14,7 @@ class PurchaseRequestLine(models.Model):
     unit_measure = fields.Char(string='Measure Unit', required=True, default='PCS', readonly=1)
     product_qty = fields.Integer(string='Quantity Product', digits='Product Unit of Measure', required=True)
     price_unit = fields.Integer(string='Unit Price', required=True)
-    price_subtotal = fields.Integer(string='Subtotal Price', compute='_compute_amount')
+    price_subtotal = fields.Integer(string='Total Price', compute='_compute_amount')
     due_date = fields.Date(string='Due date',
                            related='order_request_id.due_date')
     description = fields.Text(string='Description')
