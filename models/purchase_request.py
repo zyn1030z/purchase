@@ -121,7 +121,7 @@ class PurchaseRequest(models.Model):
             exist_product_list = []
             for line in purchase.order_request_line:
                 if line.product_id.id in exist_product_list:
-                    raise ValidationError('Product should be one per line.')
+                    raise ValidationError('Product must be one per line.')
                 exist_product_list.append(line.product_id.id)
 
     # _sql_constraints = [('order_product_uniq', 'unique (order_id,product_id)',
