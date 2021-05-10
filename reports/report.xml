@@ -5,8 +5,10 @@
                 id="report_ir_model_overview"
                 string="Purchase Request"
                 model="purchase.request"
-                report_type="qweb-pdf"
+                report_type="qweb-html"
                 name="purchase_request.report_purchase_request"
-                file="purchase_request.report_purchase_request"/>
+                file="purchase_request.report_purchase_request"
+        />
+
     </data>
 </odoo>

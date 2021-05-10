@@ -14,7 +14,7 @@ class PurchaseRequest(models.Model):
     check_by = fields.Many2one('res.users', 'Approved User', default=lambda self: self.env.user)
     department = fields.Many2one('hr.department', "Department",
                                  default=lambda self: self.env.user.department_id)
-    cost_total = fields.Char(string='Total cost', compute='_amount_all')
+    cost_total = fields.Integer(string='Total cost', compute='_amount_all')
     creation_date = fields.Date(string='Request Date', default=datetime.today())
     due_date = fields.Date(string='Due date')
     approved_date = fields.Date(string='Approved Date', readonly=1)

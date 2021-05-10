@@ -71,10 +71,10 @@
                                        mode="tree,kanban">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
-                                        <field name="unit_measure"/>
-                                        <field name="product_qty"/>
-                                        <field name="price_unit"/>
-                                        <field name="price_subtotal"/>
+                                        <field name="unit_measure" style="text-align:center;"/>
+                                        <field name="product_qty" style="text-align:center;"/>
+                                        <field name="price_unit" style="text-align:center;"/>
+                                        <field name="price_subtotal" style="text-align:center;"/>
                                         <field name="due_date"/>
                                         <field name="description"/>
                                         <field name="delivered_qty"
