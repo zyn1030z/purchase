@@ -69,6 +69,7 @@ class PurchaseRequest(models.Model):
 
     @api.depends('order_request_line.price_subtotal')
     def _amount_all(self):
+        # print(self)
         for order in self:
             amount_total = 0
             for line in order.order_request_line:
@@ -113,7 +114,8 @@ class PurchaseRequest(models.Model):
 
     def reject_function(self):
         for rc in self:
-            reject = self.env['reject.reason'].search([('owner_id', '=', self.id)]).reason_reject_reason
+            reject = self.env['reject.reason'].search([('owner_id', '=', self.id)],
+                                                      order="id desc", limit=1).reason_reject_reason
             rc.reject_reason_request1 = reject
 
     @api.constrains('order_request_line')

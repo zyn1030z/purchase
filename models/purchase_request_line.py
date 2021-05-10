@@ -18,7 +18,7 @@ class PurchaseRequestLine(models.Model):
     due_date = fields.Date(string='Due date',
                            related='order_request_id.due_date')
     description = fields.Text(string='Description')
-    delivered_qty = fields.Float(string='Quantity delivered')
+    delivered_qty = fields.Integer(string='Quantity delivered')
     order_request_id = fields.Many2one(comodel_name='purchase.request', string='Purchase Request Reference',
                                        ondelete='cascade')
     state = fields.Char('Use status', compute="_compute_state")

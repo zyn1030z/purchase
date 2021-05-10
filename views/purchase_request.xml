@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <menuitem id="purchase_request_menu" name="Purchase Request"
+                  action="purchase_request_act" sequence="1"/>
+        <menuitem id="purchase_request_menu" name="Purchase Request"
+                  parent="purchase.menu_procurement_management"
+                  action="purchase_request_act" sequence="1"/>
         <record id="purchase_request_tree" model="ir.ui.view">
             <field name="name">purchase.request.tree</field>
             <field name="model">purchase.request</field>
@@ -121,7 +126,7 @@
                                         <field name="price_subtotal" style="text-align:center;"/>
                                         <field name="due_date"/>
                                         <field name="description"/>
-                                        <field name="delivered_qty"
+                                        <field name="delivered_qty" style="text-align:center;"
                                                attrs="{'column_invisible': [('parent.state', 'not in', ['approved','complete'])]}"/>
                                         <!--                                        attrs="{'invisible':[('state', '=', 'draft')]}"-->
                                     </tree>
@@ -149,11 +154,6 @@
             <field name="view_mode">tree,form,kanban</field>
         </record>
 
-        <menuitem id="purchase_request_menu" name="Purchase Request"
-                  action="purchase_request_act" sequence="1"/>
-        <menuitem id="purchase_request_menu" name="Purchase Request"
-                  parent="purchase.menu_procurement_management"
-                  action="purchase_request_act" sequence="1"/>
 
     </data>
 </odoo>
