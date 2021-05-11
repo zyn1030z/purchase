@@ -49,6 +49,8 @@
             <field name="domain_force">[('state', 'in', ['waiting_for_approval', 'complete'])]</field>
         </record>
 
+
+
     </data>
 
 </odoo>

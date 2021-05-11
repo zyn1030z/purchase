@@ -10,7 +10,7 @@
             <field name="name">purchase.request.tree</field>
             <field name="model">purchase.request</field>
             <field name="arch" type="xml">
-                <tree string="Purchase Request">
+                <tree string="Purchase Request" default_order="name desc">
                     <field name="name"/>
                     <field name="creation_date"/>
                     <field name="request_by"/>
@@ -25,7 +25,7 @@
             <field name="name">purchase.order.kanban</field>
             <field name="model">purchase.request</field>
             <field name="arch" type="xml">
-                <kanban class="o_kanban_mobile">
+                <kanban class="o_kanban_mobile" default_order="name desc">
                     <field name="name"/>
                     <field name="cost_total"/>
                     <field name="state"/>
@@ -71,6 +71,9 @@
                 <form js_class="custom_form">
 
                     <header>
+                        <button string="Test" type="object" states='draft'
+                                class="oe_highlight" name="test"
+                                groups="purchase_request.group_purchase_request_admin_department"/>
                         <button string="Send" type="object" states='draft'
                                 class="oe_highlight" name="send_approve_purchase_request"
                                 groups="purchase_request.group_purchase_request_admin_department"/>

@@ -69,7 +69,6 @@ class PurchaseRequest(models.Model):
 
     @api.depends('order_request_line.price_subtotal')
     def _amount_all(self):
-        # print(self)
         for order in self:
             amount_total = 0
             for line in order.order_request_line:
@@ -114,6 +113,7 @@ class PurchaseRequest(models.Model):
 
     def reject_function(self):
         for rc in self:
+            # get reject reason last
             reject = self.env['reject.reason'].search([('owner_id', '=', self.id)],
                                                       order="id desc", limit=1).reason_reject_reason
             rc.reject_reason_request1 = reject
@@ -129,3 +129,9 @@ class PurchaseRequest(models.Model):
 
     # _sql_constraints = [('order_product_uniq', 'unique (order_id,product_id)',
     #                      'Duplicate products in order line not allowed !')]
+
+    def test(self):
+        sql = "select name from purchase_request;"
+        self.env.cr.execute(sql)
+        res_all = self.env.cr.fetchall()
+        print(res_all)
