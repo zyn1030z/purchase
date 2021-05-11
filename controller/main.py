@@ -11,8 +11,4 @@ class Main(http.Controller):
         result += '</td></tr><tr><td>'.join(records.mapped('name'))
         return result
 
-    @http.route('/test1', type='json', auth='none')
-    def test_check(self):
-        result = '<html><body>'
-        result += 'testtest1'
-        return result
+
