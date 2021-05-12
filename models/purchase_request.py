@@ -131,7 +131,7 @@ class PurchaseRequest(models.Model):
                 exist_product_list.append(line.product_id.id)
 
     # Construct file excel : Product,Quantity,Product,Unit,Price,Description
-    def import_file_xls(self):
+    def import_xls(self):
         wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
         product_id_in_datas = self.env['purchase.request.line'].search(
             [('order_request_id', '=', self.id)]).product_id  # product_id trong database

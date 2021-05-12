@@ -71,7 +71,7 @@
                 <form js_class="custom_form">
 
                     <header>
-                        <button name="import_file_xls" string="Import Excel" type="object" states='draft'
+                        <button name="import_xls" string="Import Excel" type="object" states='draft'
                                 class="oe_highlight"
                                 groups="purchase_request.group_purchase_request_admin_department"/>
                         <button string="Send" type="object" states='draft'
