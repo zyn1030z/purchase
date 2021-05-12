@@ -138,8 +138,10 @@ class PurchaseRequest(models.Model):
             [('order_request_id', '=', self.id)]).product_id  # product_id trong database
         exist_product_list = []
         exist_code_list = []
+        line = 1
         for product_id_in_data in product_id_in_datas:
             exist_product_list.append(product_id_in_data.id)
+
         for sheet in wb.sheets():
             values = []
             for row in range(sheet.nrows):
@@ -155,12 +157,12 @@ class PurchaseRequest(models.Model):
             # check duplicate product in file excel
             for val in values[1:]:
                 if val[0] in exist_code_list:
-                    raise ValidationError(_('Product are not exists in database, product code : (%s).') % val[0])
-
+                    raise ValidationError(
+                        _('Product are duplicate, product code : (%s).') % (val[0]))
                 else:
                     exist_code_list.append(val[0])
-
             for val in values[1:]:
+                line += 1
                 product_id_import = self.env['product.product'].search(
                     [('default_code', '=', val[0])]).id  # product_id trong file import
                 if product_id_import is not False:
@@ -171,6 +173,6 @@ class PurchaseRequest(models.Model):
                              'description': val[3]})
                         self.env.cr.commit()
                     else:
-                        raise ValidationError(_('Product (%s) already are exists') % val[0])
+                        raise ValidationError(_('Product already are exists, line (%s)') % str(line))
                 else:
-                    raise ValidationError(_('Product (%s) are not exists in database') % val[0])
+                    raise ValidationError(_('Product (%s) are not exists in database') % str(line))
