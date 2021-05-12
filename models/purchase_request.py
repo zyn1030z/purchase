@@ -130,14 +130,14 @@ class PurchaseRequest(models.Model):
                     raise ValidationError('Product must be one per line.')
                 exist_product_list.append(line.product_id.id)
 
-    # _sql_constraints = [('order_product_uniq', 'unique (order_id,product_id)',
-    #
-    #                      'Duplicate products in order line not allowed !')]
-
-    def import_xls(self):
+    # Construct file excel : Product,Quantity,Product,Unit,Price,Description
+    def import_file_xls(self):
         wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
-        product_id_in_data = self.env['purchase.request.line'].search(
+        product_id_in_datas = self.env['purchase.request.line'].search(
             [('order_request_id', '=', self.id)]).product_id  # product_id trong database
+        exist_product_list = []
+        for product_id_in_data in product_id_in_datas:
+            exist_product_list.append(product_id_in_data.id)
         for sheet in wb.sheets():
             values = []
             for row in range(sheet.nrows):
@@ -153,22 +153,14 @@ class PurchaseRequest(models.Model):
             for val in values[1:]:
                 product_id_import = self.env['product.product'].search(
                     [('default_code', '=', val[0])]).id  # product_id trong file import
-                # product_id_in_data = self.env['purchase.request.line'].search(
-                #     [('order_request_id', '=', self.id)]).product_id  # product_id trong database
-                # for p in product_id_in_data:
-                #     print(product_id_in_data)
-                #     if product_id == p.id:
-                #         raise ValidationError('Product must be one per line.')
-                #     else:
-                #         # print(product_id_in_data)
-                #         self.env['purchase.request.line'].create(
-                #             {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
-                #              'product_id': product_id,
-                #              'description': val[3]})
-                #         self.env.cr.commit()
-                print(product_id_in_data)
-                self.env['purchase.request.line'].create(
-                    {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
-                     'product_id': product_id_import,
-                     'description': val[3]})
-                self.env.cr.commit()
+                if product_id_import is not False:
+                    if not product_id_import in exist_product_list:
+                        self.env['purchase.request.line'].create(
+                            {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
+                             'product_id': product_id_import,
+                             'description': val[3]})
+                        self.env.cr.commit()
+                    else:
+                        raise ValidationError('Product already are exists')
+                else:
+                    raise ValidationError('Product are not exists in database')
