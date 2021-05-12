@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api, exceptions
+from odoo import models, fields, api, exceptions, _
 from datetime import datetime
 
 from odoo.exceptions import UserError, ValidationError
@@ -137,6 +137,7 @@ class PurchaseRequest(models.Model):
         product_id_in_datas = self.env['purchase.request.line'].search(
             [('order_request_id', '=', self.id)]).product_id  # product_id trong database
         exist_product_list = []
+        exist_code_list = []
         for product_id_in_data in product_id_in_datas:
             exist_product_list.append(product_id_in_data.id)
         for sheet in wb.sheets():
@@ -151,6 +152,14 @@ class PurchaseRequest(models.Model):
                         pass
                     col_values.append(value)
                 values.append(col_values)
+            # check duplicate product in file excel
+            for val in values[1:]:
+                if val[0] in exist_code_list:
+                    raise ValidationError(_('Product are not exists in database, product code : (%s).') % val[0])
+
+                else:
+                    exist_code_list.append(val[0])
+
             for val in values[1:]:
                 product_id_import = self.env['product.product'].search(
                     [('default_code', '=', val[0])]).id  # product_id trong file import
@@ -162,6 +171,6 @@ class PurchaseRequest(models.Model):
                              'description': val[3]})
                         self.env.cr.commit()
                     else:
-                        raise ValidationError('Product already are exists')
+                        raise ValidationError(_('Product (%s) already are exists') % val[0])
                 else:
-                    raise ValidationError('Product are not exists in database')
+                    raise ValidationError(_('Product (%s) are not exists in database') % val[0])

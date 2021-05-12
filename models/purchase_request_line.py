@@ -5,6 +5,7 @@ from odoo.exceptions import UserError, ValidationError
 class PurchaseRequestLine(models.Model):
     _name = 'purchase.request.line'
     _description = "Purchase Request"
+    _order = 'due_date'
     _inherit = [
         'mail.thread'
     ]
@@ -41,29 +42,6 @@ class PurchaseRequestLine(models.Model):
         # state_pr = self.env['5purchase.request.line'].search([('order_request_id', '=', self.id)]).state
         # print(state_pr)
         # rec.state = state_pr
-
-    # print(self.env['purchase.request.line'].search(
-
-    #     [('product_id', '=', rec.product_id.id), ('order_request_id', '=', self.order_request_id.id)
-    #      ]))
-
-    # if self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id)
-    #                                              ]):
-    #     print(self.env['purchase.request.line'].search(
-    #         [('product_id', '=', rec.product_id.id), ('order_request_id', '=', rec.order_request_id.id)
-    #          ]))
-    # raise UserError(' You do not choose the same product')
-
-    # print(rec.order_request_id.id)
-    # print(rec.product_id.name)
-    # print(rec.product_id.id)
-    # print(self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id)
-    #                                                 ]))
-    # if self.env['purchase.request.line'].search([('product_id', '=', rec.product_id.id),
-    #                                              ('order_request_id', '=', rec.order_request_id.id)
-    #                                              ]):
-    #     print('test')
-    # raise UserError('You do not choose the same product')
 
     @api.constrains('product_qty')
     def _check_product_qty(self):
