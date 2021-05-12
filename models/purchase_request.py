@@ -3,6 +3,8 @@ from odoo import models, fields, api, exceptions
 from datetime import datetime
 
 from odoo.exceptions import UserError, ValidationError
+import base64
+import xlrd
 
 
 class PurchaseRequest(models.Model):
@@ -40,6 +42,7 @@ class PurchaseRequest(models.Model):
 
     reject_reason_request1 = fields.Char(compute='reject_function', string='Rejection reason')
     context = fields.Text(default='{}', required=True)
+    xls_file = fields.Binary('File import')
 
     # reject_reason_request = fields.Char(related='reject_reason_id.reason_reject_reason')
     # @api.model
@@ -128,4 +131,44 @@ class PurchaseRequest(models.Model):
                 exist_product_list.append(line.product_id.id)
 
     # _sql_constraints = [('order_product_uniq', 'unique (order_id,product_id)',
+    #
     #                      'Duplicate products in order line not allowed !')]
+
+    def import_xls(self):
+        wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
+        product_id_in_data = self.env['purchase.request.line'].search(
+            [('order_request_id', '=', self.id)]).product_id  # product_id trong database
+        for sheet in wb.sheets():
+            values = []
+            for row in range(sheet.nrows):
+                col_values = []
+                for col in range(sheet.ncols):
+                    value = sheet.cell(row, col).value
+                    try:
+                        value = str(value)
+                    except:
+                        pass
+                    col_values.append(value)
+                values.append(col_values)
+            for val in values[1:]:
+                product_id_import = self.env['product.product'].search(
+                    [('default_code', '=', val[0])]).id  # product_id trong file import
+                # product_id_in_data = self.env['purchase.request.line'].search(
+                #     [('order_request_id', '=', self.id)]).product_id  # product_id trong database
+                # for p in product_id_in_data:
+                #     print(product_id_in_data)
+                #     if product_id == p.id:
+                #         raise ValidationError('Product must be one per line.')
+                #     else:
+                #         # print(product_id_in_data)
+                #         self.env['purchase.request.line'].create(
+                #             {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
+                #              'product_id': product_id,
+                #              'description': val[3]})
+                #         self.env.cr.commit()
+                print(product_id_in_data)
+                self.env['purchase.request.line'].create(
+                    {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
+                     'product_id': product_id_import,
+                     'description': val[3]})
+                self.env.cr.commit()

@@ -8,11 +8,11 @@ class PurchaseRequestLine(models.Model):
     _inherit = [
         'mail.thread'
     ]
-    product_id = fields.Many2one('product.product', string='Product', change_default=True, required=True)
+    product_id = fields.Many2one('product.product', string='Product', change_default=True)
     taxes_id = fields.Many2many('account.tax', string='Taxes',
                                 domain=['|', ('active', '=', False), ('active', '=', True)])
     unit_measure = fields.Char(string='Measure Unit', required=True, default='PCS', readonly=1)
-    product_qty = fields.Integer(string='Quantity Product', digits='Product Unit of Measure', required=True)
+    product_qty = fields.Integer(string='Quantity Product', digits='Product Unit of Measure')
     price_unit = fields.Integer(string='Unit Price', required=True)
     price_subtotal = fields.Integer(string='Total Price', compute='_compute_amount')
     due_date = fields.Date(string='Due date',

@@ -71,6 +71,9 @@
                 <form js_class="custom_form">
 
                     <header>
+                        <button name="import_xls" string="Import" type="object" states='draft'
+                                class="oe_highlight"
+                                groups="purchase_request.group_purchase_request_admin_department"/>
                         <button string="Send" type="object" states='draft'
                                 class="oe_highlight" name="send_approve_purchase_request"
                                 groups="purchase_request.group_purchase_request_admin_department"/>
@@ -111,7 +114,7 @@
                                 <field name="due_date"/>
                                 <field name="approved_date"/>
                                 <field name="company_id"/>
-
+                                <field name="xls_file"/>
                             </group>
                         </group>
                         <notebook>
