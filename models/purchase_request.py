@@ -42,7 +42,6 @@ class PurchaseRequest(models.Model):
 
     reject_reason_request1 = fields.Char(compute='reject_function', string='Rejection reason')
     context = fields.Text(default='{}', required=True)
-    xls_file = fields.Binary('File import')
 
     # reject_reason_request = fields.Char(related='reject_reason_id.reason_reject_reason')
     # @api.model
@@ -131,6 +130,8 @@ class PurchaseRequest(models.Model):
                 exist_product_list.append(line.product_id.id)
 
     # Construct file excel : Product,Quantity,Product,Unit,Price,Description
+    xls_file = fields.Binary('Import Detail')
+
     def import_xls(self):
         wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
         product_id_in_datas = self.env['purchase.request.line'].search(

@@ -114,7 +114,6 @@
                                 <field name="due_date"/>
                                 <field name="approved_date"/>
                                 <field name="company_id"/>
-                                <field name="xls_file"/>
                             </group>
                         </group>
                         <notebook>
@@ -138,6 +137,7 @@
                         </notebook>
                         <group>
                             <group>
+                                <field name="xls_file"/>
                                 <field name="reject_reason_request1" states="draft"/>
                             </group>
                         </group>
