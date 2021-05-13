@@ -120,14 +120,14 @@ class PurchaseRequest(models.Model):
                                                       order="id desc", limit=1).reason_reject_reason
             rc.reject_reason_request1 = reject
 
-    @api.constrains('order_request_line')
-    def _check_exist_product_in_line(self):
-        for purchase in self:
-            exist_product_list = []
-            for line in purchase.order_request_line:
-                if line.product_id.id in exist_product_list:
-                    raise ValidationError('Product must be one per line.')
-                exist_product_list.append(line.product_id.id)
+    # @api.constrains('order_request_line')
+    # def _check_exist_product_in_line(self):
+    #     for purchase in self:
+    #         exist_product_list = []
+    #         for line in purchase.order_request_line:
+    #             if line.product_id.id in exist_product_list:
+    #                 raise ValidationError('Product must be one per line.')
+    #             exist_product_list.append(line.product_id.id)
 
     # Construct file excel : Product,Quantity,Product,Unit,Price,Description
     xls_file = fields.Binary('Import Detail')
@@ -301,11 +301,21 @@ class PurchaseRequest(models.Model):
                     #             print('Kiểm tra đơn giá')
                     #         else:
                     #             raise ValidationError('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo')
+                    arr_line_error_dvt = []
+                    line_check_dvt = 7
                     for val in values[6:]:
                         if val[2]:
                             arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
+                            print(arr_dvt)
                             if len(arr_dvt) == 0:
-                                raise ValidationError('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo')
+                                arr_line_error_dvt.append(line_check_dvt)
+                                print(arr_line_error_dvt)
+                            line_check_dvt += 1
+                    if len(arr_line_error_dvt) != 0:
+                        raise ValidationError(
+                            _('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo, dòng (%s)') % str(
+                                arr_line_error_dvt))
+                    for val in values[6:]:
                         if not val[4]:
                             print('Hệ thống tự động lấy đơn giá theo bảng nhà cung cấp')
                         product_id_import = self.env['product.product'].search(
@@ -314,16 +324,3 @@ class PurchaseRequest(models.Model):
                             {'price_unit': float(val[4]), 'product_qty': float(val[3]), 'order_request_id': self.id,
                              'product_id': product_id_import})
                         self.env.cr.commit()
-
-            # else:
-            #     for val in values[1:]:
-            #         product_id_import = self.env['product.product'].search(
-            #             [('default_code', '=', val[0])]).id  # product_id trong file import
-            #         if not product_id_import in exist_product_list:
-            #             self.env['purchase.request.line'].create(
-            #                 {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
-            #                  'product_id': product_id_import,
-            #                  'description': val[3]})
-            #             self.env.cr.commit()
-            #         else:
-            #             raise ValidationError(_('Product already are exists, line (%s)') % str(line))
