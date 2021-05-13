@@ -306,7 +306,6 @@ class PurchaseRequest(models.Model):
                     for val in values[6:]:
                         if val[2]:
                             arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
-                            print(arr_dvt)
                             if len(arr_dvt) == 0:
                                 arr_line_error_dvt.append(line_check_dvt)
                                 print(arr_line_error_dvt)
