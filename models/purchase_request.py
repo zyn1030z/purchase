@@ -247,7 +247,6 @@ class PurchaseRequest(models.Model):
         # mảng lưu giá trị các dòng sai
         for product_id_in_data in product_id_in_datas:
             exist_product_list.append(product_id_in_data.id)
-
         for sheet in wb.sheets():
             arr_line_error_slsp = []
             arr_line_error_not_exist_database = []
@@ -292,26 +291,29 @@ class PurchaseRequest(models.Model):
                     raise ValidationError(
                         _('Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)') % str(arr_line_error_slsp))
                 else:
-                    for val in values[6:]:
-                        if not val[2]:
-                            print('đơn vị tính để trống, tự động gán giá trị ')
-                            print('kiểm tra đơn giá')
-                        else:
-                            arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
-                            if len(arr_dvt) != 0:
-                                print('Kiểm tra đơn giá')
-                            else:
-                                raise ValidationError('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo')
+                    # for val in values[6:]:
+                    #     if not val[2]:
+                    #         print('đơn vị tính để trống, tự động gán giá trị ')
+                    #         print('kiểm tra đơn giá')
+                    #     else:
+                    #         arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
+                    #         if len(arr_dvt) != 0:
+                    #             print('Kiểm tra đơn giá')
+                    #         else:
+                    #             raise ValidationError('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo')
                     for val in values[6:]:
                         if val[2]:
                             arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
                             if len(arr_dvt) == 0:
                                 raise ValidationError('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo')
-                            else:
-                                print('check giá')
-                        else:
-                            print('Tự động gán đvt')
-                            print('check giá')
+                        if not val[4]:
+                            print('Hệ thống tự động lấy đơn giá theo bảng nhà cung cấp')
+                        product_id_import = self.env['product.product'].search(
+                            [('default_code', '=', val[0])]).id
+                        self.env['purchase.request.line'].create(
+                            {'price_unit': float(val[4]), 'product_qty': float(val[3]), 'order_request_id': self.id,
+                             'product_id': product_id_import})
+                        self.env.cr.commit()
 
             # else:
             #     for val in values[1:]:
