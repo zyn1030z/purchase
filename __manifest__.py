@@ -2,8 +2,8 @@
 {
     'name': 'Purchase Request',
     'version': '1.0',
-    'summary': 'Odoo 13 Purchase Request',
     'sequence': 1,
+    'summary': 'Odoo 14 Purchase Request',
     'description': """""",
     'category': 'Tutorials',
     'author': 'Hung Pham',
@@ -23,12 +23,13 @@
         'views/asset.xml',
         'reports/purchase_request_template.xml',
         'reports/report.xml',
-        # 'data/sequence.xml'
+        'data/sequence.xml',
     ],
     'demo': [],
     'qweb': [],
     'images': [''],
     'installable': True,
-    'application': True,
     'auto_install': False,
+    'application': True,
+
 }

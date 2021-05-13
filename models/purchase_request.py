@@ -136,7 +136,9 @@ class PurchaseRequest(models.Model):
         wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
         product_id_in_datas = self.env['purchase.request.line'].search(
             [('order_request_id', '=', self.id)]).product_id  # product_id trong database
+        # mã sản phẩm trong data base
         exist_product_list = []
+        # mã code trong file excel
         exist_code_list = []
         line = 1
         for product_id_in_data in product_id_in_datas:
