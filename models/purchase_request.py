@@ -140,6 +140,8 @@ class PurchaseRequest(models.Model):
         exist_product_list = []
         # mã code trong file excel
         exist_code_list = []
+        # mảng lưu giá trị các dòng sai
+        arr_line_error = []
         line = 1
         for product_id_in_data in product_id_in_datas:
             exist_product_list.append(product_id_in_data.id)
@@ -177,4 +179,7 @@ class PurchaseRequest(models.Model):
                     else:
                         raise ValidationError(_('Product already are exists, line (%s)') % str(line))
                 else:
-                    raise ValidationError(_('Product (%s) are not exists in database') % str(line))
+                    arr_line_error.append(line)
+                    # raise ValidationError(_('Product (%s) are not exists in database') % str(line))
+            if arr_line_error is not None:
+                raise ValidationError(_('Product are not exists in database, line (%s)') % str(arr_line_error))
