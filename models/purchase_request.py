@@ -132,6 +132,110 @@ class PurchaseRequest(models.Model):
     # Construct file excel : Product,Quantity,Product,Unit,Price,Description
     xls_file = fields.Binary('Import Detail')
 
+    # def import_xls(self):
+    #     wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
+    #     product_id_in_datas = self.env['purchase.request.line'].search(
+    #         [('order_request_id', '=', self.id)]).product_id  # product_id trong database
+    #     # mã sản phẩm trong data base
+    #     exist_product_list = []
+    #     # mã code trong file excel
+    #     exist_code_list = []
+    #     # mảng lưu giá trị các dòng sai
+    #     arr_line_error = []
+    #     line = 1
+    #     for product_id_in_data in product_id_in_datas:
+    #         exist_product_list.append(product_id_in_data.id)
+    #
+    #     for sheet in wb.sheets():
+    #         values = []
+    #         for row in range(sheet.nrows):
+    #             col_values = []
+    #             for col in range(sheet.ncols):
+    #                 value = sheet.cell(row, col).value
+    #                 try:
+    #                     value = str(value)
+    #                 except:
+    #                     pass
+    #                 col_values.append(value)
+    #             values.append(col_values)
+    #         # check duplicate product in file excel
+    #         for val in values[1:]:
+    #             if val[0] in exist_code_list:
+    #                 raise ValidationError(
+    #                     _('Product are duplicate, product code : (%s).') % (val[0]))
+    #             else:
+    #                 exist_code_list.append(val[0])
+    #         for val in values[1:]:
+    #             line += 1
+    #             product_id_import = self.env['product.product'].search(
+    #                 [('default_code', '=', val[0])]).id  # product_id trong file import
+    #             if product_id_import is not False:
+    #                 if not product_id_import in exist_product_list:
+    #                     self.env['purchase.request.line'].create(
+    #                         {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
+    #                          'product_id': product_id_import,
+    #                          'description': val[3]})
+    #                     self.env.cr.commit()
+    #                 else:
+    #                     raise ValidationError(_('Product already are exists, line (%s)') % str(line))
+    #             else:
+    #                 arr_line_error.append(line)
+    #         if arr_line_error is not None:
+    #             raise ValidationError(_('Product are not exists in database, line (%s)') % str(arr_line_error))
+    # def import_xls(self):
+    #     wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
+    #     product_id_in_datas = self.env['purchase.request.line'].search(
+    #         [('order_request_id', '=', self.id)]).product_id  # product_id trong database
+    #     # mã sản phẩm trong data base
+    #     exist_product_list = []
+    #     # mã code trong file excel
+    #     exist_code_list = []
+    #     # mảng lưu giá trị các dòng sai
+    #     arr_line_error = []
+    #     line = 1
+    #     for product_id_in_data in product_id_in_datas:
+    #         exist_product_list.append(product_id_in_data.id)
+    #
+    #     for sheet in wb.sheets():
+    #         values = []
+    #         for row in range(sheet.nrows):
+    #             col_values = []
+    #             for col in range(sheet.ncols):
+    #                 value = sheet.cell(row, col).value
+    #                 try:
+    #                     value = str(value)
+    #                 except:
+    #                     pass
+    #                 col_values.append(value)
+    #             values.append(col_values)
+    #         # check duplicate product in file excel
+    #         for val in values[1:]:
+    #             if val[0] in exist_code_list:
+    #                 raise ValidationError(
+    #                     _('Product are duplicate, product code : (%s).') % (val[0]))
+    #             else:
+    #                 exist_code_list.append(val[0])
+    #         # kiểm tra số sp k tồn tại trong database
+    #         for val in values[1:]:
+    #             line += 1
+    #             product_id_import = self.env['product.product'].search(
+    #                 [('default_code', '=', val[0])]).id  # product_id trong file import
+    #             if product_id_import is False:
+    #                 arr_line_error.append(line)
+    #         if len(arr_line_error) != 0:
+    #             raise ValidationError(_('Product are not exists in database, line (%s)') % str(arr_line_error))
+    #         else:
+    #             for val in values[1:]:
+    #                 product_id_import = self.env['product.product'].search(
+    #                     [('default_code', '=', val[0])]).id  # product_id trong file import
+    #                 if not product_id_import in exist_product_list:
+    #                     self.env['purchase.request.line'].create(
+    #                         {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
+    #                          'product_id': product_id_import,
+    #                          'description': val[3]})
+    #                     self.env.cr.commit()
+    #                 else:
+    #                     raise ValidationError(_('Product already are exists, line (%s)') % str(line))
     def import_xls(self):
         wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
         product_id_in_datas = self.env['purchase.request.line'].search(
@@ -141,13 +245,15 @@ class PurchaseRequest(models.Model):
         # mã code trong file excel
         exist_code_list = []
         # mảng lưu giá trị các dòng sai
-        arr_line_error = []
-        line = 1
         for product_id_in_data in product_id_in_datas:
             exist_product_list.append(product_id_in_data.id)
 
         for sheet in wb.sheets():
+            arr_line_error_slsp = []
+            arr_line_error_not_exist_database = []
             values = []
+            line_check_exist_data = 7
+            line_check_slsp = 7
             for row in range(sheet.nrows):
                 col_values = []
                 for col in range(sheet.ncols):
@@ -159,27 +265,63 @@ class PurchaseRequest(models.Model):
                     col_values.append(value)
                 values.append(col_values)
             # check duplicate product in file excel
-            for val in values[1:]:
+            for val in values[6:]:
                 if val[0] in exist_code_list:
                     raise ValidationError(
                         _('Product are duplicate, product code : (%s).') % (val[0]))
                 else:
                     exist_code_list.append(val[0])
-            for val in values[1:]:
-                line += 1
+            # kiểm tra số sp k tồn tại trong database
+            for val in values[6:]:
                 product_id_import = self.env['product.product'].search(
                     [('default_code', '=', val[0])]).id  # product_id trong file import
-                if product_id_import is not False:
-                    if not product_id_import in exist_product_list:
-                        self.env['purchase.request.line'].create(
-                            {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
-                             'product_id': product_id_import,
-                             'description': val[3]})
-                        self.env.cr.commit()
-                    else:
-                        raise ValidationError(_('Product already are exists, line (%s)') % str(line))
+                if product_id_import is False:
+                    arr_line_error_not_exist_database.append(line_check_exist_data)
+                line_check_exist_data += 1
+            if len(arr_line_error_not_exist_database) != 0:
+                raise ValidationError(
+                    _('Product are not exists in database, line (%s)') % str(arr_line_error_not_exist_database))
+            else:
+                for val in values[6:]:
+                    if not val[3]:
+                        arr_line_error_slsp.append(line_check_slsp)
+                    elif float(val[3]) < 0:
+                        arr_line_error_slsp.append(line_check_slsp)
+                    line_check_slsp += 1
+                if len(arr_line_error_slsp) != 0:
+                    raise ValidationError(
+                        _('Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)') % str(arr_line_error_slsp))
                 else:
-                    arr_line_error.append(line)
-                    # raise ValidationError(_('Product (%s) are not exists in database') % str(line))
-            if arr_line_error is not None:
-                raise ValidationError(_('Product are not exists in database, line (%s)') % str(arr_line_error))
+                    for val in values[6:]:
+                        if not val[2]:
+                            print('đơn vị tính để trống, tự động gán giá trị ')
+                            print('kiểm tra đơn giá')
+                        else:
+                            arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
+                            if len(arr_dvt) != 0:
+                                print('Kiểm tra đơn giá')
+                            else:
+                                raise ValidationError('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo')
+                    for val in values[6:]:
+                        if val[2]:
+                            arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
+                            if len(arr_dvt) == 0:
+                                raise ValidationError('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo')
+                            else:
+                                print('check giá')
+                        else:
+                            print('Tự động gán đvt')
+                            print('check giá')
+
+            # else:
+            #     for val in values[1:]:
+            #         product_id_import = self.env['product.product'].search(
+            #             [('default_code', '=', val[0])]).id  # product_id trong file import
+            #         if not product_id_import in exist_product_list:
+            #             self.env['purchase.request.line'].create(
+            #                 {'price_unit': float(val[2]), 'product_qty': float(val[1]), 'order_request_id': self.id,
+            #                  'product_id': product_id_import,
+            #                  'description': val[3]})
+            #             self.env.cr.commit()
+            #         else:
+            #             raise ValidationError(_('Product already are exists, line (%s)') % str(line))
