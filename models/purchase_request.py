@@ -322,5 +322,5 @@ class PurchaseRequest(models.Model):
                             [('default_code', '=', val[0])]).id
                         self.env['purchase.request.line'].create(
                             {'price_unit': float(val[4]), 'product_qty': float(val[3]), 'order_request_id': self.id,
-                             'product_id': product_id_import})
+                             'product_id': product_id_import, 'unit_measure': val[2]})
                         self.env.cr.commit()
