@@ -13,6 +13,10 @@ class PurchaseRequestLine(models.Model):
     taxes_id = fields.Many2many('account.tax', string='Taxes',
                                 domain=['|', ('active', '=', False), ('active', '=', True)])
     unit_measure = fields.Char(string='Measure Unit', required=True, default='PCS', readonly=1)
+    # unit_measure = fields.Many2one(
+    #     'uom.uom', 'Unit of Measure',
+    #     required=True,
+    #     help="Default unit of measure used for all stock operations.")
     product_qty = fields.Integer(string='Quantity Product', digits='Product Unit of Measure')
     price_unit = fields.Integer(string='Unit Price', required=True)
     price_subtotal = fields.Integer(string='Total Price', compute='_compute_amount')

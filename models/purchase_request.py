@@ -253,6 +253,13 @@ class PurchaseRequest(models.Model):
             values = []
             line_check_exist_data = 7
             line_check_slsp = 7
+
+            # product_id_import_standard_1 = self.env['product.product'].search(
+            #     [('default_code', '=', 'code2')]).product_tmpl_id.id
+            # uom_global = self.env['product.template'].search(
+            #     [('id', '=', product_id_import_standard_1)]
+            # ).uom_id
+
             for row in range(sheet.nrows):
                 col_values = []
                 for col in range(sheet.ncols):
@@ -304,7 +311,15 @@ class PurchaseRequest(models.Model):
                     arr_line_error_dvt = []
                     line_check_dvt = 7
                     for val in values[6:]:
-                        if val[2]:
+                        if not val[2]:
+                            # kiểm tra nếu k có đơn vị tính thì gán theo hệ thống
+                            product_id_import_standard = self.env['product.product'].search(
+                                [('default_code', '=', val[0])]).product_tmpl_id.id
+                            uom = self.env['product.template'].search(
+                                [('id', '=', product_id_import_standard)]
+                            ).uom_id
+                            val[2] = uom.name
+                        elif val[2]:
                             arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
                             if len(arr_dvt) == 0:
                                 arr_line_error_dvt.append(line_check_dvt)
@@ -324,8 +339,6 @@ class PurchaseRequest(models.Model):
                                 [('id', '=', product_id_import_standard)]
                             ).standard_price
                             val[4] = standard_price
-                            print(product_id_import_standard)
-                            print(standard_price)
                         product_id_import = self.env['product.product'].search(
                             [('default_code', '=', val[0])]).id
                         self.env['purchase.request.line'].create(
