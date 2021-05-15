@@ -317,6 +317,15 @@ class PurchaseRequest(models.Model):
                     for val in values[6:]:
                         if not val[4]:
                             print('Hệ thống tự động lấy đơn giá theo bảng nhà cung cấp')
+                            # lấy đơn giá rồi gán vào val[4]
+                            product_id_import_standard = self.env['product.product'].search(
+                                [('default_code', '=', val[0])]).product_tmpl_id.id
+                            standard_price = self.env['product.template'].search(
+                                [('id', '=', product_id_import_standard)]
+                            ).standard_price
+                            val[4] = standard_price
+                            print(product_id_import_standard)
+                            print(standard_price)
                         product_id_import = self.env['product.product'].search(
                             [('default_code', '=', val[0])]).id
                         self.env['purchase.request.line'].create(
