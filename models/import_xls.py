@@ -9,7 +9,7 @@ from odoo.exceptions import ValidationError
 class YourWizard(models.Model):
     _name = 'import.xls.wizard'
     # your file will be stored here:
-    xls_file = fields.Binary(string='Xls File', required=True)
+    xls_file = fields.Binary(string='File Excel', required=True)
 
     def import_xls(self):
         try:
@@ -145,6 +145,3 @@ class YourWizard(models.Model):
                     % (str(listToStr_line_not_exist_database),
                        str(listToStr_line_slsp)))
 
-    def import_xls1(self):
-        self.env['purchase.request'].create({'state': 'draft'})
-        self.env.cr.commit()
