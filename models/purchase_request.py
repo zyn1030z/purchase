@@ -232,14 +232,14 @@ class PurchaseRequest(models.Model):
             elif len(arr_line_error_not_exist_database) != 0 and len(arr_line_error_dvt) != 0 and len(
                     arr_line_error_slsp) == 0:
                 raise ValidationError(
-                    _('Sản phẩm đã tồn tại trong hệ thống, dòng (%s)\n'
+                    _('Mã sản phẩm không tồn tại trong hệ thống, dòng (%s)\n'
                       'Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo, dòng (%s)') % (str(
                         listToStr_line_not_exist_database), str(
                         listToStr_line_dvt)))
             elif len(arr_line_error_not_exist_database) != 0 and len(arr_line_error_dvt) != 0 and len(
                     arr_line_error_slsp) != 0:
                 raise ValidationError(
-                    _('Sản phẩm đã tồn tại trong hệ thống, dòng (%s)\n'
+                    _('Mã sản phẩm không tồn tại trong hệ thống, dòng (%s)\n'
                       'Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo, dòng (%s)\n'
                       'Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)')
                     % (str(listToStr_line_not_exist_database),
@@ -264,7 +264,7 @@ class PurchaseRequest(models.Model):
             elif len(arr_line_error_not_exist_database) != 0 and len(arr_line_error_dvt) == 0 and len(
                     arr_line_error_slsp) != 0:
                 raise ValidationError(
-                    _('Sản phẩm đã tồn tại trong hệ thống, dòng (%s)\n'
+                    _('Mã sản phẩm không tồn tại trong hệ thống, dòng (%s)\n'
                       'Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)')
                     % (str(listToStr_line_not_exist_database),
                        str(listToStr_line_slsp)))
