@@ -190,6 +190,7 @@ class PurchaseRequest(models.Model):
             arr_line_error_dvt = []
             line_check_dvt = 7
             for val in values[6:]:
+                print(val)
                 if not val[2]:
                     # kiểm tra nếu k có đơn vị tính thì gán theo hệ thống
                     product_id_import_standard = self.env['product.product'].search(
@@ -198,6 +199,7 @@ class PurchaseRequest(models.Model):
                         [('id', '=', product_id_import_standard)]
                     ).uom_id
                     val[2] = uom.name
+                    line_check_dvt += 1
                 elif val[2]:
                     arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
                     if len(arr_dvt) == 0:
