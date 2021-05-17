@@ -71,9 +71,9 @@
                 <form js_class="custom_form">
 
                     <header>
-                        <button string="Import file" type="object" states='draft'
-                                class="oe_highlight" name="test"
-                                groups="purchase_request.group_purchase_request_admin_department"/>
+<!--                        <button string="Import file" type="object" states='draft'-->
+<!--                                class="oe_highlight" name="test"-->
+<!--                                groups="purchase_request.group_purchase_request_admin_department"/>-->
                         <button string="Send" type="object" states='draft'
                                 class="oe_highlight" name="send_approve_purchase_request"
                                 groups="purchase_request.group_purchase_request_admin_department"/>
