@@ -6,7 +6,7 @@ from odoo import models, fields, _
 from odoo.exceptions import ValidationError
 
 
-class YourWizard(models.Model):
+class ImportXLS(models.TransientModel):
     _name = 'import.xls.wizard'
     # your file will be stored here:
     xls_file = fields.Binary(string='File Excel', required=True)
