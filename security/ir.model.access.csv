@@ -10,3 +10,4 @@ access_purchase_request_line_head,purchase.request.line.head,model_purchase_requ
 access_reject_reason_admin,purchase.reject.reason.admin,model_reject_reason,group_purchase_request_admin_department,1,1,1,0
 access_reject_reason_head,purchase.reject.reason.head,model_reject_reason,group_purchase_request_head_department,1,1,1,1
 
+access_import_xls,purchase.import.xls,model_import_xls_wizard,,1,1,1,1

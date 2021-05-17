@@ -131,10 +131,18 @@ class PurchaseRequest(models.Model):
     #                      'Duplicate products in order line not allowed !')]
 
     def test(self):
-        sql = "select name from purchase_request;"
-        self.env.cr.execute(sql)
-        res_all = self.env.cr.fetchall()
-        print(res_all)
+        return {
+            'name': 'Import xls file',
+            'type': 'ir.actions.act_window',
+            'res_model': 'import.xls.wizard',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'target': 'new'
+        }
+        # sql = "select name from purchase_request;"
+        # self.env.cr.execute(sql)
+        # res_all = self.env.cr.fetchall()
+        # print(res_all)
     # def import_xls(self):
     #     wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
     #     product_id_in_datas = self.env['purchase.request.line'].search(
