@@ -12,7 +12,6 @@ class YourWizard(models.Model):
     xls_file = fields.Binary(string='Xls File', required=True)
 
     def import_xls(self):
-        print('self id', self.id)
         try:
             wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
         except:
@@ -83,6 +82,9 @@ class YourWizard(models.Model):
             listToStr_line_dvt = ' , '.join([str(elem) for elem in arr_line_error_dvt])
             if len(arr_line_error_not_exist_database) == 0 and len(arr_line_error_dvt) == 0 and len(
                     arr_line_error_slsp) == 0:
+                self.env['purchase.request'].create({'state': 'draft'})
+                self.env.cr.commit()
+                print('self id', self.id)
                 for val in values[6:]:
                     if not val[4]:
                         # lấy đơn giá rồi gán vào val[4]
@@ -94,6 +96,7 @@ class YourWizard(models.Model):
                         val[4] = standard_price
                     product_id_import = self.env['product.product'].search(
                         [('default_code', '=', val[0])]).id
+
                     self.env['purchase.request.line'].create(
                         {'price_unit': float(val[4]), 'product_qty': float(val[3]), 'order_request_id': self.id,
                          'product_id': product_id_import, 'unit_measure': val[2]})
@@ -141,3 +144,7 @@ class YourWizard(models.Model):
                       'Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)')
                     % (str(listToStr_line_not_exist_database),
                        str(listToStr_line_slsp)))
+
+    def import_xls1(self):
+        self.env['purchase.request'].create({'state': 'draft'})
+        self.env.cr.commit()

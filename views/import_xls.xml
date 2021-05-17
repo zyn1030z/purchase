@@ -21,7 +21,7 @@
         </record>
 
         <record id="your_wizard_action" model="ir.actions.act_window">
-            <field name="name">Import a csv file</field>
+            <field name="name">Import Detail Purchase Request</field>
             <field name="res_model">import.xls.wizard</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>

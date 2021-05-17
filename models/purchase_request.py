@@ -118,14 +118,14 @@ class PurchaseRequest(models.Model):
                                                       order="id desc", limit=1).reason_reject_reason
             rc.reject_reason_request1 = reject
 
-    @api.constrains('order_request_line')
-    def _check_exist_product_in_line(self):
-        for purchase in self:
-            exist_product_list = []
-            for line in purchase.order_request_line:
-                if line.product_id.id in exist_product_list:
-                    raise ValidationError('Product must be one per line.')
-                exist_product_list.append(line.product_id.id)
+    # @api.constrains('order_request_line')
+    # def _check_exist_product_in_line(self):
+    #     for purchase in self:
+    #         exist_product_list = []
+    #         for line in purchase.order_request_line:
+    #             if line.product_id.id in exist_product_list:
+    #                 raise ValidationError('Product must be one per line.')
+    #             exist_product_list.append(line.product_id.id)
 
     # _sql_constraints = [('order_product_uniq', 'unique (order_id,product_id)',
     #                      'Duplicate products in order line not allowed !')]
