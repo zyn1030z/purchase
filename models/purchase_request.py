@@ -133,7 +133,10 @@ class PurchaseRequest(models.Model):
     xls_file = fields.Binary('Import Detail')
 
     def import_xls(self):
-        wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
+        try:
+            wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
+        except:
+            raise ValidationError('File nhập vào phải là file excel')
         product_id_in_datas = self.env['purchase.request.line'].search(
             [('order_request_id', '=', self.id)]).product_id  # product_id trong database
         # mã sản phẩm trong data base
