@@ -254,11 +254,6 @@ class PurchaseRequest(models.Model):
             line_check_exist_data = 7
             line_check_slsp = 7
 
-            # product_id_import_standard_1 = self.env['product.product'].search(
-            #     [('default_code', '=', 'code2')]).product_tmpl_id.id
-            # uom_global = self.env['product.template'].search(
-            #     [('id', '=', product_id_import_standard_1)]
-            # ).uom_id
 
             for row in range(sheet.nrows):
                 col_values = []
@@ -270,6 +265,7 @@ class PurchaseRequest(models.Model):
                         pass
                     col_values.append(value)
                 values.append(col_values)
+                print(values)
             # check duplicate product in file excel
             for val in values[6:]:
                 if val[0] in exist_code_list:
@@ -298,16 +294,6 @@ class PurchaseRequest(models.Model):
                     raise ValidationError(
                         _('Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)') % str(arr_line_error_slsp))
                 else:
-                    # for val in values[6:]:
-                    #     if not val[2]:
-                    #         print('đơn vị tính để trống, tự động gán giá trị ')
-                    #         print('kiểm tra đơn giá')
-                    #     else:
-                    #         arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
-                    #         if len(arr_dvt) != 0:
-                    #             print('Kiểm tra đơn giá')
-                    #         else:
-                    #             raise ValidationError('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo')
                     arr_line_error_dvt = []
                     line_check_dvt = 7
                     for val in values[6:]:
@@ -345,3 +331,5 @@ class PurchaseRequest(models.Model):
                             {'price_unit': float(val[4]), 'product_qty': float(val[3]), 'order_request_id': self.id,
                              'product_id': product_id_import, 'unit_measure': val[2]})
                         self.env.cr.commit()
+
+
