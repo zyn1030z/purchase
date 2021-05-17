@@ -165,7 +165,7 @@ class PurchaseRequest(models.Model):
             for val in values[6:]:
                 if val[0] in exist_code_list:
                     raise ValidationError(
-                        _('Product are duplicate, product code : (%s).') % (val[0]))
+                        _('Sản phẩm trùng trong file excel, mã sản phẩm : (%s).') % (val[0]))
                 else:
                     exist_code_list.append(val[0])
             # kiểm tra số sp k tồn tại trong database
@@ -177,7 +177,7 @@ class PurchaseRequest(models.Model):
                 line_check_exist_data += 1
             if len(arr_line_error_not_exist_database) != 0:
                 raise ValidationError(
-                    _('Product are not exists in database, line (%s)') % str(arr_line_error_not_exist_database))
+                    _('Sản phẩm đã tồn tại trong hệ thống, dòng (%s)') % str(arr_line_error_not_exist_database))
             else:
                 for val in values[6:]:
                     if not val[3]:
