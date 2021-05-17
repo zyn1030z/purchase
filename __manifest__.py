@@ -23,8 +23,8 @@
         'views/asset.xml',
         'reports/purchase_request.xml',
         'reports/report.xml',
-        'views/import_xls.xml'
-        # 'data/sequence.xml'
+        'views/import_xls.xml',
+        'data/sequence.xml'
     ],
     'demo': [],
     'qweb': [],

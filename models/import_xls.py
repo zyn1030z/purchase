@@ -12,6 +12,7 @@ class YourWizard(models.TransientModel):
     xls_file = fields.Binary(string='Xls File', required=True)
 
     def import_xls(self):
+        print('self id', self.id)
         try:
             wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
         except:
