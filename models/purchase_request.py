@@ -203,7 +203,6 @@ class PurchaseRequest(models.Model):
                             arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
                             if len(arr_dvt) == 0:
                                 arr_line_error_dvt.append(line_check_dvt)
-                                print(arr_line_error_dvt)
                             line_check_dvt += 1
                     if len(arr_line_error_dvt) != 0:
                         raise ValidationError(
@@ -211,7 +210,6 @@ class PurchaseRequest(models.Model):
                                 arr_line_error_dvt))
                     for val in values[6:]:
                         if not val[4]:
-                            print('Hệ thống tự động lấy đơn giá theo bảng nhà cung cấp')
                             # lấy đơn giá rồi gán vào val[4]
                             product_id_import_standard = self.env['product.product'].search(
                                 [('default_code', '=', val[0])]).product_tmpl_id.id
