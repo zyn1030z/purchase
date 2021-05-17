@@ -140,7 +140,6 @@ class PurchaseRequest(models.Model):
         exist_product_list = []
         # mã code trong file excel
         exist_code_list = []
-        # mảng lưu giá trị các dòng sai
         for product_id_in_data in product_id_in_datas:
             exist_product_list.append(product_id_in_data.id)
         for sheet in wb.sheets():
