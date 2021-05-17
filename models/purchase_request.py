@@ -69,6 +69,13 @@ class PurchaseRequest(models.Model):
         vals['name'] = name + '.' + seq
         return super(PurchaseRequest, self).create(vals)
 
+    @api.model
+    def get_import_templates(self):
+        return [{
+            'label': _('Import Template for Purchase Request'),
+            'template': 'purchase_request/static/xls/imp_donmuahang.xls'
+        }]
+
     @api.depends('order_request_line.price_subtotal')
     def _amount_all(self):
         # print(self)
@@ -133,7 +140,11 @@ class PurchaseRequest(models.Model):
     xls_file = fields.Binary('Import Detail')
 
     def import_xls(self):
-        wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
+        try:
+            wb = xlrd.open_workbook(file_contents=base64.decodestring(self.xls_file))
+        except:
+            raise ValidationError(
+                'File import phải là file excel')
         product_id_in_datas = self.env['purchase.request.line'].search(
             [('order_request_id', '=', self.id)]).product_id  # product_id trong database
         # mã sản phẩm trong data base
@@ -159,14 +170,6 @@ class PurchaseRequest(models.Model):
                         pass
                     col_values.append(value)
                 values.append(col_values)
-                print(values)
-            # check duplicate product in file excel
-            for val in values[6:]:
-                if val[0] in exist_code_list:
-                    raise ValidationError(
-                        _('Sản phẩm trùng trong file excel, mã sản phẩm : (%s).') % (val[0]))
-                else:
-                    exist_code_list.append(val[0])
             # kiểm tra số sp k tồn tại trong database
             for val in values[6:]:
                 product_id_import = self.env['product.product'].search(
@@ -174,52 +177,92 @@ class PurchaseRequest(models.Model):
                 if product_id_import is False:
                     arr_line_error_not_exist_database.append(line_check_exist_data)
                 line_check_exist_data += 1
-            if len(arr_line_error_not_exist_database) != 0:
-                raise ValidationError(
-                    _('Sản phẩm đã tồn tại trong hệ thống, dòng (%s)') % str(arr_line_error_not_exist_database))
-            else:
+
+            # kiểm tra số lượng sản phẩm lớn hơn 0
+            for val in values[6:]:
+                if not val[3]:
+                    arr_line_error_slsp.append(line_check_slsp)
+                elif float(val[3]) < 0:
+                    arr_line_error_slsp.append(line_check_slsp)
+                line_check_slsp += 1
+
+            # kiểm tra đơn vị tính
+            arr_line_error_dvt = []
+            line_check_dvt = 7
+            for val in values[6:]:
+                if not val[2]:
+                    # kiểm tra nếu k có đơn vị tính thì gán theo hệ thống
+                    product_id_import_standard = self.env['product.product'].search(
+                        [('default_code', '=', val[0])]).product_tmpl_id.id
+                    uom = self.env['product.template'].search(
+                        [('id', '=', product_id_import_standard)]
+                    ).uom_id
+                    val[2] = uom.name
+                elif val[2]:
+                    arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
+                    if len(arr_dvt) == 0:
+                        arr_line_error_dvt.append(line_check_dvt)
+                    line_check_dvt += 1
+            listToStr_line_slsp = ' , '.join([str(elem) for elem in arr_line_error_slsp])
+            listToStr_line_not_exist_database = ' , '.join([str(elem) for elem in arr_line_error_not_exist_database])
+            listToStr_line_dvt = ' , '.join([str(elem) for elem in arr_line_error_dvt])
+            if len(arr_line_error_not_exist_database) == 0 and len(arr_line_error_dvt) == 0 and len(
+                    arr_line_error_slsp) == 0:
                 for val in values[6:]:
-                    if not val[3]:
-                        arr_line_error_slsp.append(line_check_slsp)
-                    elif float(val[3]) < 0:
-                        arr_line_error_slsp.append(line_check_slsp)
-                    line_check_slsp += 1
-                if len(arr_line_error_slsp) != 0:
-                    raise ValidationError(
-                        _('Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)') % str(arr_line_error_slsp))
-                else:
-                    arr_line_error_dvt = []
-                    line_check_dvt = 7
-                    for val in values[6:]:
-                        if not val[2]:
-                            # kiểm tra nếu k có đơn vị tính thì gán theo hệ thống
-                            product_id_import_standard = self.env['product.product'].search(
-                                [('default_code', '=', val[0])]).product_tmpl_id.id
-                            uom = self.env['product.template'].search(
-                                [('id', '=', product_id_import_standard)]
-                            ).uom_id
-                            val[2] = uom.name
-                        elif val[2]:
-                            arr_dvt = self.env['uom.uom'].search([('name', '=', val[2])])
-                            if len(arr_dvt) == 0:
-                                arr_line_error_dvt.append(line_check_dvt)
-                            line_check_dvt += 1
-                    if len(arr_line_error_dvt) != 0:
-                        raise ValidationError(
-                            _('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo, dòng (%s)') % str(
-                                arr_line_error_dvt))
-                    for val in values[6:]:
-                        if not val[4]:
-                            # lấy đơn giá rồi gán vào val[4]
-                            product_id_import_standard = self.env['product.product'].search(
-                                [('default_code', '=', val[0])]).product_tmpl_id.id
-                            standard_price = self.env['product.template'].search(
-                                [('id', '=', product_id_import_standard)]
-                            ).standard_price
-                            val[4] = standard_price
-                        product_id_import = self.env['product.product'].search(
-                            [('default_code', '=', val[0])]).id
-                        self.env['purchase.request.line'].create(
-                            {'price_unit': float(val[4]), 'product_qty': float(val[3]), 'order_request_id': self.id,
-                             'product_id': product_id_import, 'unit_measure': val[2]})
-                        self.env.cr.commit()
+                    if not val[4]:
+                        # lấy đơn giá rồi gán vào val[4]
+                        product_id_import_standard = self.env['product.product'].search(
+                            [('default_code', '=', val[0])]).product_tmpl_id.id
+                        standard_price = self.env['product.template'].search(
+                            [('id', '=', product_id_import_standard)]
+                        ).standard_price
+                        val[4] = standard_price
+                    product_id_import = self.env['product.product'].search(
+                        [('default_code', '=', val[0])]).id
+                    self.env['purchase.request.line'].create(
+                        {'price_unit': float(val[4]), 'product_qty': float(val[3]), 'order_request_id': self.id,
+                         'product_id': product_id_import, 'unit_measure': val[2]})
+                    self.env.cr.commit()
+            elif len(arr_line_error_not_exist_database) != 0 and len(arr_line_error_dvt) == 0 and len(
+                    arr_line_error_slsp) == 0:
+                raise ValidationError(
+                    _('Sản phẩm đã tồn tại trong hệ thống, dòng (%s)') % str(listToStr_line_not_exist_database))
+            elif len(arr_line_error_not_exist_database) != 0 and len(arr_line_error_dvt) != 0 and len(
+                    arr_line_error_slsp) == 0:
+                raise ValidationError(
+                    _('Sản phẩm đã tồn tại trong hệ thống, dòng (%s)\n'
+                      'Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo, dòng (%s)') % (str(
+                        listToStr_line_not_exist_database), str(
+                        listToStr_line_dvt)))
+            elif len(arr_line_error_not_exist_database) != 0 and len(arr_line_error_dvt) != 0 and len(
+                    arr_line_error_slsp) != 0:
+                raise ValidationError(
+                    _('Sản phẩm đã tồn tại trong hệ thống, dòng (%s)\n'
+                      'Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo, dòng (%s)\n'
+                      'Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)')
+                    % (str(listToStr_line_not_exist_database),
+                       str(listToStr_line_dvt),
+                       str(listToStr_line_slsp)))
+            elif len(arr_line_error_not_exist_database) == 0 and len(arr_line_error_dvt) != 0 and len(
+                    arr_line_error_slsp) == 0:
+                raise ValidationError(
+                    _('Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo, dòng (%s)') % str(
+                        listToStr_line_dvt))
+            elif len(arr_line_error_not_exist_database) == 0 and len(arr_line_error_dvt) == 0 and len(
+                    arr_line_error_slsp) != 0:
+                raise ValidationError(
+                    _('Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)') % str(listToStr_line_slsp))
+            elif len(arr_line_error_not_exist_database) == 0 and len(arr_line_error_dvt) != 0 and len(
+                    arr_line_error_slsp) != 0:
+                raise ValidationError(
+                    _(
+                        'Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)\n'
+                        'Đơn vị tính của sản phẩm phải cùng nhóm đơn vị tính đã khai báo, dòng (%s)') % (str(
+                        listToStr_line_slsp), str(listToStr_line_dvt)))
+            elif len(arr_line_error_not_exist_database) != 0 and len(arr_line_error_dvt) == 0 and len(
+                    arr_line_error_slsp) != 0:
+                raise ValidationError(
+                    _('Sản phẩm đã tồn tại trong hệ thống, dòng (%s)\n'
+                      'Số lượng sản phẩm phải lớn hơn 0 hoặc không để trống, dòng (%s)')
+                    % (str(listToStr_line_not_exist_database),
+                       str(listToStr_line_slsp)))
