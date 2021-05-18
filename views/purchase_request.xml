@@ -114,6 +114,7 @@
                         </group>
                         <notebook>
                             <page string="Details">
+                                <field name="xls_file"/>
                                 <field name="order_request_line" widget="section_and_note_one2many"
                                        mode="tree,kanban">
                                     <tree editable="bottom">
@@ -133,7 +134,6 @@
                         </notebook>
                         <group>
                             <group>
-                                <field name="xls_file"/>
                                 <field name="reject_reason_request1" states="draft"/>
                             </group>
                         </group>
